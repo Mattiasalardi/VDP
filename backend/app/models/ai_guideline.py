@@ -1,8 +1,8 @@
 from sqlalchemy import Column, String, Text, ForeignKey, JSON, Boolean, Integer
 from sqlalchemy.orm import relationship
-from .base import Base, BaseModel
+from .base import BaseModel
 
-class AIGuideline(Base, BaseModel):
+class AIGuideline(BaseModel):
     """Generated and user-modified AI scoring guidelines"""
     
     __tablename__ = "ai_guidelines"

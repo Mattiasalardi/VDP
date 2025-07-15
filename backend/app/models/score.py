@@ -1,8 +1,8 @@
 from sqlalchemy import Column, String, Float, Text, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
-from .base import Base, BaseModel
+from .base import BaseModel
 
-class Score(Base, BaseModel):
+class Score(BaseModel):
     """Detailed scoring breakdown for applications"""
     
     __tablename__ = "scores"

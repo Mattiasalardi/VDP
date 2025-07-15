@@ -1,8 +1,8 @@
 from sqlalchemy import Column, String, Integer, ForeignKey, DateTime, Text
 from sqlalchemy.orm import relationship
-from .base import Base, BaseModel
+from .base import BaseModel
 
-class UploadedFile(Base, BaseModel):
+class UploadedFile(BaseModel):
     """PDF document references and metadata"""
     
     __tablename__ = "uploaded_files"

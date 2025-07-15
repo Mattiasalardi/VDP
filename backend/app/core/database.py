@@ -1,6 +1,5 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
 from .config import settings
 
 # Create SQLAlchemy engine
@@ -31,10 +30,14 @@ def get_db():
 def create_tables():
     """Create all tables in the database"""
     from app.models.base import Base
+    # Import all models to ensure they're registered with the metadata
+    from app.models import *
     Base.metadata.create_all(bind=engine)
 
 # Helper function to drop all tables
 def drop_tables():
     """Drop all tables from the database"""
     from app.models.base import Base
+    # Import all models to ensure they're registered with the metadata
+    from app.models import *
     Base.metadata.drop_all(bind=engine)

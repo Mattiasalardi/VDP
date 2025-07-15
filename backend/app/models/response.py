@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Text, ForeignKey, JSON
 from sqlalchemy.orm import relationship
-from .base import Base, BaseModel
+from .base import BaseModel
 
-class Response(Base, BaseModel):
+class Response(BaseModel):
     """Answers to questionnaire questions"""
     
     __tablename__ = "responses"

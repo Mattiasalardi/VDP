@@ -1,8 +1,8 @@
 from sqlalchemy import Column, String, Text, ForeignKey, Float, Integer, DateTime, Boolean
 from sqlalchemy.orm import relationship
-from .base import Base, BaseModel
+from .base import BaseModel
 
-class Report(Base, BaseModel):
+class Report(BaseModel):
     """Generated PDF reports with scores and analysis"""
     
     __tablename__ = "reports"

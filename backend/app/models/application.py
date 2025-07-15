@@ -1,8 +1,8 @@
 from sqlalchemy import Column, String, Text, ForeignKey, Boolean, DateTime
 from sqlalchemy.orm import relationship
-from .base import Base, BaseModel
+from .base import BaseModel
 
-class Application(Base, BaseModel):
+class Application(BaseModel):
     """Startup applications with unique IDs"""
     
     __tablename__ = "applications"

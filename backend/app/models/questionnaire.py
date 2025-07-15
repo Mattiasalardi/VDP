@@ -1,8 +1,8 @@
 from sqlalchemy import Column, String, Text, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
-from .base import Base, BaseModel
+from .base import BaseModel
 
-class Questionnaire(Base, BaseModel):
+class Questionnaire(BaseModel):
     """Question sets for each program"""
     
     __tablename__ = "questionnaires"

@@ -4,8 +4,10 @@ from typing import Any
 
 Base = declarative_base()
 
-class BaseModel:
+class BaseModel(Base):
     """Base model class with common fields and methods"""
+    
+    __abstract__ = True
     
     id = Column(Integer, primary_key=True, index=True)
     created_at = Column(DateTime, default=func.now(), nullable=False)

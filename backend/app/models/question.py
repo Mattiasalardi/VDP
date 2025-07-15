@@ -1,8 +1,8 @@
 from sqlalchemy import Column, String, Text, Integer, Boolean, ForeignKey, JSON
 from sqlalchemy.orm import relationship
-from .base import Base, BaseModel
+from .base import BaseModel
 
-class Question(Base, BaseModel):
+class Question(BaseModel):
     """Individual questions with types and validation"""
     
     __tablename__ = "questions"

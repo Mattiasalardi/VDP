@@ -1,8 +1,8 @@
 from sqlalchemy import Column, String, Text, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
-from .base import Base, BaseModel
+from .base import BaseModel
 
-class Program(Base, BaseModel):
+class Program(BaseModel):
     """Accelerator programs (e.g., TechEd Accelerator 2024)"""
     
     __tablename__ = "programs"

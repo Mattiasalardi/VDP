@@ -1,8 +1,8 @@
 from sqlalchemy import Column, String, Text, ForeignKey, JSON
 from sqlalchemy.orm import relationship
-from .base import Base, BaseModel
+from .base import BaseModel
 
-class CalibrationAnswer(Base, BaseModel):
+class CalibrationAnswer(BaseModel):
     """Accelerator preferences and calibration responses"""
     
     __tablename__ = "calibration_answers"
