@@ -1,5 +1,6 @@
 from typing import List, Optional
-from pydantic import BaseSettings, validator
+from pydantic import validator
+from pydantic_settings import BaseSettings
 import os
 
 
@@ -7,12 +8,13 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "VDP API"
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
+    DEBUG: bool = False
     
     # Database
-    DATABASE_URL: Optional[str] = None
+    DATABASE_URL: Optional[str] = "postgresql://postgres:password@localhost:5432/vdp_db"
     
     # Redis
-    REDIS_URL: Optional[str] = None
+    REDIS_URL: Optional[str] = "redis://localhost:6379"
     
     # Security
     SECRET_KEY: str = "your-secret-key-change-in-production"
@@ -30,9 +32,7 @@ class Settings(BaseSettings):
             return [i.strip() for i in v.split(",")]
         return v
     
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
+    model_config = {"env_file": ".env", "case_sensitive": True}
 
 
 settings = Settings()
