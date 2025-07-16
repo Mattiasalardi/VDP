@@ -83,14 +83,14 @@ VDP_app/
 ## Where to Find Things
 
 ### Authentication & Security
-- **Login logic**: TBD
-- **JWT handling**: TBD
-- **Password hashing**: TBD
+- **Login logic**: `backend/app/api/v1/endpoints/auth.py` - Login/logout endpoints
+- **JWT handling**: `backend/app/api/deps/auth.py` - Token creation, verification, dependencies
+- **Password hashing**: `backend/app/api/deps/auth.py` - bcrypt password hashing utilities
 
 ### Database
-- **Models**: TBD
-- **Migrations**: TBD
-- **Schema definitions**: TBD
+- **Models**: `backend/app/models/` - All SQLAlchemy models with relationships
+- **Migrations**: `backend/alembic/versions/` - Database migration files
+- **Schema definitions**: `backend/app/models/base.py` - Base model with common fields
 
 ### Questionnaires
 - **Builder UI**: TBD
@@ -115,10 +115,10 @@ VDP_app/
 ## Common Tasks & File Locations
 
 ### Adding a New Endpoint
-1. **Route definition**: TBD
-2. **Schema/validation**: TBD
-3. **Business logic**: TBD
-4. **Database operations**: TBD
+1. **Route definition**: Create in `backend/app/api/v1/endpoints/` directory
+2. **Schema/validation**: Add Pydantic schemas in `backend/app/schemas/`
+3. **Business logic**: Implement in `backend/app/services/`
+4. **Database operations**: Use models from `backend/app/models/`
 
 ### Adding a New UI Component
 1. **Component files**: TBD
@@ -167,4 +167,4 @@ VDP_app/
 
 ---
 *This map is updated as the codebase grows - always kept current*
-*Last Updated: 2025-07-15 - Database foundation complete*
+*Last Updated: 2025-07-16 - Phase 1 complete with FastAPI foundation and authentication*

@@ -16,7 +16,31 @@ Authorization: Bearer <jwt_token>
 ## Endpoints
 
 ### Authentication
-*Endpoints will be added as implemented*
+
+#### POST /api/v1/auth/login
+Login endpoint for organizations.
+- **Request**: Form data with `username` (email) and `password`
+- **Response**: JWT token, token type, organization ID and name
+- **Status**: 200 (success), 401 (unauthorized)
+
+#### POST /api/v1/auth/logout
+Logout endpoint (stateless - token invalidation handled client-side).
+- **Requires**: Valid JWT token
+- **Response**: Success message
+- **Status**: 200 (success), 401 (unauthorized)
+
+#### GET /api/v1/auth/me
+Get current authenticated organization details.
+- **Requires**: Valid JWT token
+- **Response**: Organization ID, name, email, creation date
+- **Status**: 200 (success), 401 (unauthorized)
+
+### Health Check
+
+#### GET /health
+Health check endpoint with database connectivity test.
+- **Response**: Status and database connection status
+- **Status**: 200 (healthy), 500 (unhealthy)
 
 ### Organizations
 *Endpoints will be added as implemented*
@@ -59,4 +83,4 @@ Authorization: Bearer <jwt_token>
 *Will be documented when implemented*
 
 ---
-*Updated automatically as endpoints are implemented*
+*Last Updated: 2025-07-16 - Authentication endpoints implemented*
