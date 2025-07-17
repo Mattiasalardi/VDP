@@ -4,13 +4,54 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 
-from app.api.deps.auth import authenticate_organization, create_access_token, get_current_organization
+from app.api.deps.auth import authenticate_organization, create_access_token, get_current_organization, get_password_hash
 from app.core.config import settings
 from app.core.database import get_db
 from app.models.organization import Organization
+from app.schemas.organization import OrganizationCreate, OrganizationResponse
 
 router = APIRouter()
+
+
+@router.post("/register", response_model=OrganizationResponse)
+def register(
+    organization_data: OrganizationCreate,
+    db: Session = Depends(get_db)
+) -> Organization:
+    """
+    Register a new organization.
+    """
+    # Check if organization already exists
+    existing_org = db.query(Organization).filter(Organization.email == organization_data.email).first()
+    if existing_org:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Organization with this email already exists"
+        )
+    
+    # Create new organization
+    try:
+        hashed_password = get_password_hash(organization_data.password)
+        db_organization = Organization(
+            name=organization_data.name,
+            email=organization_data.email,
+            password_hash=hashed_password,
+            description=organization_data.description,
+            website=organization_data.website,
+            is_active=True
+        )
+        db.add(db_organization)
+        db.commit()
+        db.refresh(db_organization)
+        return db_organization
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Organization with this email already exists"
+        )
 
 
 @router.post("/login")

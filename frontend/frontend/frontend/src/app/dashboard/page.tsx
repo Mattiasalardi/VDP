@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface Organization {
   id: number;
@@ -78,6 +79,12 @@ export default function DashboardPage() {
               <span className="text-sm text-gray-600">
                 {organization?.name}
               </span>
+              <Link
+                href="/dashboard/settings"
+                className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Settings
+              </Link>
               <button
                 onClick={handleLogout}
                 className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium"
@@ -100,18 +107,37 @@ export default function DashboardPage() {
                 Venture Development Platform for {organization?.name}
               </p>
               
-              <div className="bg-white rounded-lg shadow p-6 max-w-md mx-auto">
-                <h3 className="text-lg font-semibold mb-4">Organization Details</h3>
-                <div className="space-y-2 text-left">
+              <div className="bg-white rounded-lg shadow p-6 max-w-4xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <span className="font-medium">Name:</span> {organization?.name}
+                    <h3 className="text-lg font-semibold mb-4">Organization Details</h3>
+                    <div className="space-y-2 text-left">
+                      <div>
+                        <span className="font-medium">Name:</span> {organization?.name}
+                      </div>
+                      <div>
+                        <span className="font-medium">Email:</span> {organization?.email}
+                      </div>
+                      <div>
+                        <span className="font-medium">Member since:</span>{' '}
+                        {organization?.created_at ? new Date(organization.created_at).toLocaleDateString() : 'N/A'}
+                      </div>
+                    </div>
                   </div>
+                  
                   <div>
-                    <span className="font-medium">Email:</span> {organization?.email}
-                  </div>
-                  <div>
-                    <span className="font-medium">Member since:</span>{' '}
-                    {organization?.created_at ? new Date(organization.created_at).toLocaleDateString() : 'N/A'}
+                    <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
+                    <div className="space-y-2">
+                      <button className="w-full text-left px-4 py-2 bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 transition-colors">
+                        📋 Create New Program
+                      </button>
+                      <button className="w-full text-left px-4 py-2 bg-green-50 text-green-700 rounded-md hover:bg-green-100 transition-colors">
+                        📝 Build Questionnaire
+                      </button>
+                      <button className="w-full text-left px-4 py-2 bg-purple-50 text-purple-700 rounded-md hover:bg-purple-100 transition-colors">
+                        📊 View Reports
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -72,9 +72,11 @@ VDP_app/
 - **requirements.txt**: All Python dependencies including FastAPI, SQLAlchemy, Anthropic SDK
 - **Dockerfile**: Container configuration for backend service
 
-### Frontend (`/frontend/`)
+### Frontend (`/frontend/frontend/frontend/`)
 - **src/app/**: Next.js 14 App Router structure
-- **src/app/page.tsx**: Main landing page component
+- **src/app/page.tsx**: Auto-redirect logic based on authentication state
+- **src/app/login/page.tsx**: Login form with JWT authentication
+- **src/app/dashboard/page.tsx**: Protected dashboard with organization details
 - **src/app/layout.tsx**: Root layout with metadata
 - **src/app/globals.css**: Global styles with Tailwind CSS
 - **package.json**: Node.js dependencies (React, Next.js, TypeScript, Tailwind)
@@ -83,9 +85,11 @@ VDP_app/
 ## Where to Find Things
 
 ### Authentication & Security
-- **Login logic**: `backend/app/api/v1/endpoints/auth.py` - Login/logout endpoints
+- **Backend auth**: `backend/app/api/v1/endpoints/auth.py` - Login/logout endpoints
 - **JWT handling**: `backend/app/api/deps/auth.py` - Token creation, verification, dependencies
 - **Password hashing**: `backend/app/api/deps/auth.py` - bcrypt password hashing utilities
+- **Frontend login**: `frontend/frontend/frontend/src/app/login/page.tsx` - Login form with API integration
+- **Protected routes**: `frontend/frontend/frontend/src/app/dashboard/page.tsx` - Dashboard with auth validation
 
 ### Database
 - **Models**: `backend/app/models/` - All SQLAlchemy models with relationships
@@ -121,9 +125,9 @@ VDP_app/
 4. **Database operations**: Use models from `backend/app/models/`
 
 ### Adding a New UI Component
-1. **Component files**: TBD
-2. **Styling**: TBD
-3. **API integration**: TBD
+1. **Component files**: Create in `frontend/frontend/frontend/src/app/` directory
+2. **Styling**: Use Tailwind CSS classes for responsive design
+3. **API integration**: Use fetch() with JWT tokens for backend communication
 
 ### Modifying Database Schema
 1. **Model changes**: Update SQLAlchemy models in `backend/app/models/`
@@ -167,4 +171,4 @@ VDP_app/
 
 ---
 *This map is updated as the codebase grows - always kept current*
-*Last Updated: 2025-07-16 - Phase 1 complete with FastAPI foundation and authentication*
+*Last Updated: 2025-07-16 - Phase 1 complete, Phase 2 Task 2.1 complete with full authentication system*
