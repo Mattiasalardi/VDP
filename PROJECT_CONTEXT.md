@@ -222,7 +222,6 @@ JWT_SECRET=...
 - Complete question system with all 4 question types (text, multiple choice, scale, file upload)
 - Comprehensive validation rules and ordering system
 - Full CRUD API endpoints with multi-tenant security
-- Ready for Phase 3 Task 3.2: Questionnaire Builder UI
 
 ## Development Priorities
 1. ✅ Set up project structure (FastAPI + Next.js)
