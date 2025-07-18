@@ -50,7 +50,7 @@ Structured development plan for the AI-powered application management platform. 
 - [x] Test multi-tenant data isolation
 
 ### Phase 3: Questionnaire Builder (4-5 hours)
-**Status**: In Progress (Task 3.1 Complete)  
+**Status**: ✅ COMPLETE (All tasks complete)  
 **Dependencies**: ✅ Phase 2 complete  
 **Description**: Core questionnaire creation and management system
 
@@ -60,17 +60,17 @@ Structured development plan for the AI-powered application management platform. 
 - [x] Add question ordering system
 - [x] Test question CRUD operations
 
-#### 3.2 Questionnaire Builder UI (3h)
-- [ ] Build drag-and-drop question interface
-- [ ] Create question type selector and form builders
-- [ ] Add question preview functionality
-- [ ] Implement 50-question limit validation
-- [ ] Add questionnaire save/load functionality
+#### 3.2 Questionnaire Builder UI (3h) ✅ COMPLETE
+- [x] Build drag-and-drop question interface
+- [x] Create question type selector and form builders
+- [x] Add question preview functionality
+- [x] Implement 50-question limit validation
+- [x] Add questionnaire save/load functionality
 
-#### 3.3 Questionnaire Management (1h)
-- [ ] Create questionnaire listing and editing
-- [ ] Add questionnaire duplication feature
-- [ ] Test complete questionnaire workflow
+#### 3.3 Questionnaire Management (1h) ✅ COMPLETE
+- [x] Create questionnaire listing and editing
+- [x] Add questionnaire duplication feature
+- [x] Test complete questionnaire workflow
 
 ### Phase 4: Calibration System (3-4 hours)
 **Status**: Not Started  
@@ -216,7 +216,7 @@ Structured development plan for the AI-powered application management platform. 
 - **Complex (4-5h)**: Full feature implementation, multiple integrations
 
 ## Current Priority
-**Phase 3, Task 3.2: Questionnaire Builder UI** - Task 3.1 Complete, Next Up
+**Phase 4, Task 4.1: Calibration Questions** - Phase 3 Complete, Next Up
 
 ## Notes
 - Each task should be completable in a single focused session
@@ -227,4 +227,4 @@ Structured development plan for the AI-powered application management platform. 
 ---
 *Last Updated: 2025-07-18*
 *Total Estimated Time: 25-35 hours*
-*Progress: Phase 3 Task 3.1 COMPLETE (Question Types & Models)*
+*Progress: Phase 3 COMPLETE (Questionnaire Builder System)*

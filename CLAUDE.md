@@ -55,10 +55,10 @@ Core tables: organizations, programs, questionnaires, questions, calibration_ans
 - `python3 scripts/manage_db.py seed-data` - Create seed data with test credentials
 
 ## Current Development Status
-**Phase**: 3 (Questionnaire Builder) - Task 3.1 Complete
-**Next Task**: 3.2 - Questionnaire Builder UI (drag-and-drop interface, question type selectors)
+**Phase**: 3 (Questionnaire Builder) - Task 3.2 Complete
+**Next Task**: 4.1 - Calibration Questions (pre-defined calibration question set)
 **Total Phases**: 9 phases, estimated 25-35 hours total
-**Dependencies**: Phase 1 foundation complete ✅, Phase 2 complete ✅, Phase 3 Task 3.1 complete ✅
+**Dependencies**: Phase 1 foundation complete ✅, Phase 2 complete ✅, Phase 3 complete ✅
 
 ## File Structure Created
 - `PROJECT_CONTEXT.md` - Complete project requirements and architecture
@@ -136,7 +136,9 @@ Core tables: organizations, programs, questionnaires, questions, calibration_ans
 - Organization context properly scoped in all API routes
 - Frontend-backend integration working for all organization management features
 
-## Phase 3 Task 3.1 Complete - Question Types & Models
+## Phase 3 Complete - Questionnaire Builder System
+
+### Phase 3 Task 3.1 Complete - Question Types & Models
 **Complete Question System Implementation:**
 - All 4 question types implemented: text, multiple choice, scale, file upload
 - Comprehensive Pydantic schemas with validation for each question type
@@ -153,12 +155,30 @@ Core tables: organizations, programs, questionnaires, questions, calibration_ans
 - Question validators (`backend/app/utils/question_validators.py`) with security checks
 - Test scripts for verification of all functionality
 
+### Phase 3 Task 3.2 Complete - Questionnaire Builder UI
+**Complete Frontend Questionnaire Builder:**
+- Full questionnaire management interface with listing and creation
+- Interactive question builder with all 4 question types
+- Drag-and-drop question reordering with visual feedback
+- Real-time preview mode showing user-facing form
+- Comprehensive validation and 50-question limit enforcement
+- API integration layer ready for backend questionnaire endpoints
+
+**Key Features Added:**
+- Questionnaire pages (`/dashboard/questionnaires`, `/dashboard/questionnaires/builder`)
+- Question type builders for text, multiple choice, scale, and file upload
+- Question preview component with realistic form rendering
+- Drag-and-drop functionality using HTML5 APIs
+- API service layer (`src/services/api.ts`) with error handling
+- Navigation integration from dashboard
+
 **Testing Results:**
-- All question types creating and validating correctly
-- API endpoints integrated successfully with FastAPI
-- Multi-tenant security working for question operations
-- Ordering system functional with automatic reordering
-- Validation rules working for all question types and response validation
+- All question types creating and configuring correctly
+- Drag-and-drop reordering working smoothly
+- Preview mode showing accurate form representation
+- Form validation preventing invalid submissions
+- API integration layer ready for backend connection
+- Multi-tenant security maintained throughout UI
 
 ---
 *This file serves as my persistent memory for the VDP project. Updated: 2025-07-18*

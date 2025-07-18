@@ -218,17 +218,18 @@ JWT_SECRET=...
 - Custom accelerator branding
 
 ## Current Status
-- Phase 3 Task 3.1 Complete: Question Types & Models
-- Complete question system with all 4 question types (text, multiple choice, scale, file upload)
-- Comprehensive validation rules and ordering system
-- Full CRUD API endpoints with multi-tenant security
+- Phase 3 Complete: Questionnaire Builder System
+- Complete backend question system with all 4 question types (text, multiple choice, scale, file upload)
+- Full frontend questionnaire builder with drag-and-drop, preview mode, and validation
+- Comprehensive API integration layer ready for questionnaire endpoints
+- Multi-tenant security maintained throughout frontend and backend
 
 ## Development Priorities
 1. ✅ Set up project structure (FastAPI + Next.js)
 2. ✅ Create database schema
 3. ✅ Implement authentication system
 4. ✅ Build organization management
-5. 🔄 Implement questionnaire builder (Task 3.1 Complete)
+5. ✅ Implement questionnaire builder (Complete)
 6. 🔄 Build calibration system
 7. 🔄 Create public application forms
 8. 🔄 Integrate AI processing pipeline
