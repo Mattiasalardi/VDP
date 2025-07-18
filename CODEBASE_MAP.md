@@ -11,8 +11,12 @@ VDP_app/
 │   ├── app/                 # Main application code
 │   │   ├── api/            # API routes
 │   │   │   ├── deps/       # Dependencies
+│   │   │   │   ├── auth.py # Authentication dependencies
+│   │   │   │   └── organization.py # Organization context
 │   │   │   └── v1/         # API v1 routes
 │   │   │       └── endpoints/  # Route handlers
+│   │   │           ├── auth.py # Authentication endpoints
+│   │   │           └── organizations.py # Organization endpoints
 │   │   ├── core/           # Core configuration
 │   │   │   ├── config.py   # App settings
 │   │   │   ├── database.py # Database connection & session management
@@ -32,6 +36,8 @@ VDP_app/
 │   │   │   ├── report.py   # Report model
 │   │   │   └── score.py    # Score model
 │   │   ├── schemas/        # Pydantic schemas
+│   │   │   ├── __init__.py # Schema exports
+│   │   │   └── organization.py # Organization schemas
 │   │   ├── services/       # Business logic
 │   │   ├── utils/          # Utility functions
 │   │   └── main.py         # FastAPI app entry point
@@ -49,6 +55,12 @@ VDP_app/
 ├── frontend/              # Next.js application
 │   ├── src/               # Source code
 │   │   └── app/           # App router pages
+│   │       ├── page.tsx   # Root page with auth redirect
+│   │       ├── login/     # Login page
+│   │       ├── register/  # Registration page
+│   │       └── dashboard/ # Dashboard pages
+│   │           ├── page.tsx # Main dashboard
+│   │           └── settings/ # Organization settings
 │   ├── public/            # Static assets
 │   ├── package.json       # Node.js dependencies
 │   └── Dockerfile         # Frontend container
@@ -85,20 +97,32 @@ VDP_app/
 ## Where to Find Things
 
 ### Authentication & Security
-- **Backend auth**: `backend/app/api/v1/endpoints/auth.py` - Login/logout endpoints
+- **Backend auth**: `backend/app/api/v1/endpoints/auth.py` - Login/logout/registration endpoints
 - **JWT handling**: `backend/app/api/deps/auth.py` - Token creation, verification, dependencies
 - **Password hashing**: `backend/app/api/deps/auth.py` - bcrypt password hashing utilities
 - **Frontend login**: `frontend/frontend/frontend/src/app/login/page.tsx` - Login form with API integration
+- **Frontend registration**: `frontend/frontend/frontend/src/app/register/page.tsx` - Organization registration form
 - **Protected routes**: `frontend/frontend/frontend/src/app/dashboard/page.tsx` - Dashboard with auth validation
 
 ### Database
 - **Models**: `backend/app/models/` - All SQLAlchemy models with relationships
 - **Migrations**: `backend/alembic/versions/` - Database migration files
 - **Schema definitions**: `backend/app/models/base.py` - Base model with common fields
+- **Pydantic schemas**: `backend/app/schemas/` - Request/response validation schemas
 
-### Questionnaires
-- **Builder UI**: TBD
-- **Question types**: TBD
+### Organization Management
+- **Organization API**: `backend/app/api/v1/endpoints/organizations.py` - Organization CRUD operations
+- **Organization schemas**: `backend/app/schemas/organization.py` - Organization validation schemas
+- **Organization context**: `backend/app/api/deps/organization.py` - Multi-tenant context helpers
+- **Settings page**: `frontend/frontend/frontend/src/app/dashboard/settings/page.tsx` - Organization settings UI
+
+### Questionnaires & Questions
+- **Question API**: `backend/app/api/v1/endpoints/questions.py` - Question CRUD operations
+- **Question schemas**: `backend/app/schemas/question.py` - Question validation schemas with all types
+- **Question service**: `backend/app/services/question_service.py` - Question business logic and validation
+- **Question validators**: `backend/app/utils/question_validators.py` - Validation utilities and security checks
+- **Question models**: `backend/app/models/question.py` - Question database model with relationships
+- **Builder UI**: TBD (Phase 3 Task 3.2)
 - **Form rendering**: TBD
 
 ### AI Integration
@@ -128,6 +152,7 @@ VDP_app/
 1. **Component files**: Create in `frontend/frontend/frontend/src/app/` directory
 2. **Styling**: Use Tailwind CSS classes for responsive design
 3. **API integration**: Use fetch() with JWT tokens for backend communication
+4. **Form validation**: Use React state for form handling and validation
 
 ### Modifying Database Schema
 1. **Model changes**: Update SQLAlchemy models in `backend/app/models/`
@@ -171,4 +196,4 @@ VDP_app/
 
 ---
 *This map is updated as the codebase grows - always kept current*
-*Last Updated: 2025-07-16 - Phase 1 complete, Phase 2 Task 2.1 complete with full authentication system*
+*Last Updated: 2025-07-18 - Phase 3 Task 3.1 complete with question types and models system*
