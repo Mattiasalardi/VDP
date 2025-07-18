@@ -131,9 +131,9 @@ export default function DashboardPage() {
                       <button className="w-full text-left px-4 py-2 bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 transition-colors">
                         📋 Create New Program
                       </button>
-                      <button className="w-full text-left px-4 py-2 bg-green-50 text-green-700 rounded-md hover:bg-green-100 transition-colors">
+                      <Link href="/dashboard/questionnaires" className="block w-full text-left px-4 py-2 bg-green-50 text-green-700 rounded-md hover:bg-green-100 transition-colors">
                         📝 Build Questionnaire
-                      </button>
+                      </Link>
                       <button className="w-full text-left px-4 py-2 bg-purple-50 text-purple-700 rounded-md hover:bg-purple-100 transition-colors">
                         📊 View Reports
                       </button>
