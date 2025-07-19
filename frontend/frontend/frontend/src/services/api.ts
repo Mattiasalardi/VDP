@@ -257,6 +257,72 @@ class ApiService {
       return { error: 'Network error' };
     }
   }
+
+  // AI Guidelines API methods
+  async generateGuidelines(programId: number, model: string = "anthropic/claude-3.5-sonnet"): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/ai-guidelines/programs/${programId}/generate`, {
+        method: 'POST',
+        headers: this.getHeaders(),
+        body: JSON.stringify({ model })
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
+  }
+
+  async saveGuidelines(programId: number, guidelinesData: any, isApproved: boolean = false): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/ai-guidelines/programs/${programId}/save`, {
+        method: 'POST',
+        headers: this.getHeaders(),
+        body: JSON.stringify({
+          guidelines_data: guidelinesData,
+          is_approved: isApproved
+        })
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
+  }
+
+  async getActiveGuidelines(programId: number): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/ai-guidelines/programs/${programId}/active`, {
+        method: 'GET',
+        headers: this.getHeaders()
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
+  }
+
+  async getGuidelinesHistory(programId: number): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/ai-guidelines/programs/${programId}/history`, {
+        method: 'GET',
+        headers: this.getHeaders()
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
+  }
+
+  async activateGuidelinesVersion(programId: number, version: number): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/ai-guidelines/programs/${programId}/activate/${version}`, {
+        method: 'POST',
+        headers: this.getHeaders()
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
+  }
 }
 
 export const apiService = new ApiService();

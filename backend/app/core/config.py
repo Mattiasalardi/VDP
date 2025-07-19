@@ -22,6 +22,10 @@ class Settings(BaseSettings):
     
     # AI APIs
     ANTHROPIC_API_KEY: Optional[str] = None
+    OPENROUTER_API_KEY: Optional[str] = None
+    
+    # Application settings
+    APP_DOMAIN: str = "http://localhost:3000"
     
     # CORS
     BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:3001"]
