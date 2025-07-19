@@ -122,8 +122,17 @@ VDP_app/
 - **Question service**: `backend/app/services/question_service.py` - Question business logic and validation
 - **Question validators**: `backend/app/utils/question_validators.py` - Validation utilities and security checks
 - **Question models**: `backend/app/models/question.py` - Question database model with relationships
-- **Builder UI**: TBD (Phase 3 Task 3.2)
-- **Form rendering**: TBD
+- **Builder UI**: `frontend/src/app/dashboard/questionnaires/` - Complete questionnaire builder interface
+- **Form rendering**: `frontend/src/components/QuestionPreview/` - Question preview components
+
+### Calibration System
+- **Calibration Questions**: `backend/app/core/calibration_questions.py` - 12 pre-defined calibration questions
+- **Calibration API**: `backend/app/api/v1/endpoints/calibration.py` - Complete calibration REST API
+- **Calibration schemas**: `backend/app/schemas/calibration.py` - Calibration validation schemas
+- **Calibration service**: `backend/app/services/calibration_service.py` - Calibration business logic
+- **Calibration models**: `backend/app/models/calibration_answer.py` - Calibration database model
+- **Calibration UI**: `frontend/src/app/dashboard/calibration/page.tsx` - Interactive calibration interface
+- **API integration**: `frontend/src/services/api.ts` - Calibration API methods
 
 ### AI Integration
 - **Claude API calls**: TBD
@@ -193,7 +202,8 @@ VDP_app/
 - **Database Management**: `backend/scripts/manage_db.py` with create/drop/seed/reset commands
 - **Seed Data**: Comprehensive test data in `backend/app/core/seed_data.py`
 - **Configuration**: Environment-based settings in `backend/app/core/config.py`
+- **Calibration Testing**: `backend/scripts/test_calibration.py` - Comprehensive calibration workflow testing
 
 ---
 *This map is updated as the codebase grows - always kept current*
-*Last Updated: 2025-07-18 - Phase 3 Task 3.1 complete with question types and models system*
+*Last Updated: 2025-07-19 - Phase 4 Task 4.1 complete with calibration questions system*

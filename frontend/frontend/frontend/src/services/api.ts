@@ -158,6 +158,105 @@ class ApiService {
       }, 500);
     });
   }
+
+  // Calibration API methods
+  async getCalibrationQuestions(): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/calibration/questions`, {
+        method: 'GET',
+        headers: this.getHeaders()
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
+  }
+
+  async getCalibrationStatus(programId: number): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/calibration/programs/${programId}/status`, {
+        method: 'GET',
+        headers: this.getHeaders()
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
+  }
+
+  async getCalibrationAnswers(programId: number): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/calibration/programs/${programId}/answers`, {
+        method: 'GET',
+        headers: this.getHeaders()
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
+  }
+
+  async getCalibrationSession(programId: number): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/calibration/programs/${programId}/session`, {
+        method: 'GET',
+        headers: this.getHeaders()
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
+  }
+
+  async createCalibrationAnswer(programId: number, answer: any): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/calibration/programs/${programId}/answers`, {
+        method: 'POST',
+        headers: this.getHeaders(),
+        body: JSON.stringify(answer)
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
+  }
+
+  async batchCreateCalibrationAnswers(programId: number, answers: any[]): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/calibration/programs/${programId}/answers/batch`, {
+        method: 'POST',
+        headers: this.getHeaders(),
+        body: JSON.stringify({ answers })
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
+  }
+
+  async getCalibrationAnswer(programId: number, questionKey: string): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/calibration/programs/${programId}/answers/${questionKey}`, {
+        method: 'GET',
+        headers: this.getHeaders()
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
+  }
+
+  async deleteCalibrationAnswer(programId: number, questionKey: string): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/calibration/programs/${programId}/answers/${questionKey}`, {
+        method: 'DELETE',
+        headers: this.getHeaders()
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
+  }
 }
 
 export const apiService = new ApiService();

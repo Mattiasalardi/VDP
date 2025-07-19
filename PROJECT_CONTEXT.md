@@ -219,9 +219,12 @@ JWT_SECRET=...
 
 ## Current Status
 - Phase 3 Complete: Questionnaire Builder System
+- Phase 4.1 Complete: Calibration Questions System
 - Complete backend question system with all 4 question types (text, multiple choice, scale, file upload)
 - Full frontend questionnaire builder with drag-and-drop, preview mode, and validation
-- Comprehensive API integration layer ready for questionnaire endpoints
+- Comprehensive calibration system with 12 questions across 5 categories for accelerator preferences
+- Complete calibration API with progress tracking, batch processing, and completion status
+- Frontend calibration interface with category navigation and real-time progress tracking
 - Multi-tenant security maintained throughout frontend and backend
 
 ## Development Priorities
@@ -230,12 +233,12 @@ JWT_SECRET=...
 3. ✅ Implement authentication system
 4. ✅ Build organization management
 5. ✅ Implement questionnaire builder (Complete)
-6. 🔄 Build calibration system
+6. 🔄 Build calibration system (Task 4.1 Complete - Questions, Next: 4.2 AI Guidelines)
 7. 🔄 Create public application forms
 8. 🔄 Integrate AI processing pipeline
 9. 🔄 Develop report generation
 10. 🔄 Build staff dashboard
 
 ---
-*Last updated: 2025-07-18*
+*Last updated: 2025-07-19*
 *This document serves as the central reference for the VDP application build process.*

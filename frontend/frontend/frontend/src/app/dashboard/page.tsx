@@ -134,6 +134,9 @@ export default function DashboardPage() {
                       <Link href="/dashboard/questionnaires" className="block w-full text-left px-4 py-2 bg-green-50 text-green-700 rounded-md hover:bg-green-100 transition-colors">
                         📝 Build Questionnaire
                       </Link>
+                      <Link href="/dashboard/calibration" className="block w-full text-left px-4 py-2 bg-yellow-50 text-yellow-700 rounded-md hover:bg-yellow-100 transition-colors">
+                        🎯 Accelerator Calibration
+                      </Link>
                       <button className="w-full text-left px-4 py-2 bg-purple-50 text-purple-700 rounded-md hover:bg-purple-100 transition-colors">
                         📊 View Reports
                       </button>
