@@ -128,14 +128,17 @@ export default function DashboardPage() {
                   <div>
                     <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
                     <div className="space-y-2">
-                      <button className="w-full text-left px-4 py-2 bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 transition-colors">
-                        📋 Create New Program
-                      </button>
+                      <Link href="/dashboard/programs" className="block w-full text-left px-4 py-2 bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 transition-colors">
+                        📋 Manage Programs
+                      </Link>
                       <Link href="/dashboard/questionnaires" className="block w-full text-left px-4 py-2 bg-green-50 text-green-700 rounded-md hover:bg-green-100 transition-colors">
                         📝 Build Questionnaire
                       </Link>
                       <Link href="/dashboard/calibration" className="block w-full text-left px-4 py-2 bg-yellow-50 text-yellow-700 rounded-md hover:bg-yellow-100 transition-colors">
                         🎯 Accelerator Calibration
+                      </Link>
+                      <Link href="/dashboard/guidelines" className="block w-full text-left px-4 py-2 bg-indigo-50 text-indigo-700 rounded-md hover:bg-indigo-100 transition-colors">
+                        🤖 AI Guidelines
                       </Link>
                       <button className="w-full text-left px-4 py-2 bg-purple-50 text-purple-700 rounded-md hover:bg-purple-100 transition-colors">
                         📊 View Reports

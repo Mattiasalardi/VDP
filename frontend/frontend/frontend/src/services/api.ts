@@ -24,6 +24,81 @@ class ApiService {
     return { data };
   }
 
+  // Generic HTTP methods
+  async get<T = any>(url: string): Promise<T> {
+    try {
+      const response = await fetch(`${API_BASE_URL}${url}`, {
+        method: 'GET',
+        headers: this.getHeaders()
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+        throw new Error(errorData.message || errorData.detail || `HTTP ${response.status}`);
+      }
+      
+      return await response.json();
+    } catch (error: any) {
+      throw new Error(error.message || 'Network error');
+    }
+  }
+
+  async post<T = any>(url: string, data?: any): Promise<T> {
+    try {
+      const response = await fetch(`${API_BASE_URL}${url}`, {
+        method: 'POST',
+        headers: this.getHeaders(),
+        body: data ? JSON.stringify(data) : undefined
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+        throw new Error(errorData.message || errorData.detail || `HTTP ${response.status}`);
+      }
+      
+      return await response.json();
+    } catch (error: any) {
+      throw new Error(error.message || 'Network error');
+    }
+  }
+
+  async put<T = any>(url: string, data?: any): Promise<T> {
+    try {
+      const response = await fetch(`${API_BASE_URL}${url}`, {
+        method: 'PUT',
+        headers: this.getHeaders(),
+        body: data ? JSON.stringify(data) : undefined
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+        throw new Error(errorData.message || errorData.detail || `HTTP ${response.status}`);
+      }
+      
+      return await response.json();
+    } catch (error: any) {
+      throw new Error(error.message || 'Network error');
+    }
+  }
+
+  async delete<T = any>(url: string): Promise<T> {
+    try {
+      const response = await fetch(`${API_BASE_URL}${url}`, {
+        method: 'DELETE',
+        headers: this.getHeaders()
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+        throw new Error(errorData.message || errorData.detail || `HTTP ${response.status}`);
+      }
+      
+      return await response.json();
+    } catch (error: any) {
+      throw new Error(error.message || 'Network error');
+    }
+  }
+
   // Question API methods
   async getQuestions(questionnaireId: number): Promise<ApiResponse<any>> {
     try {

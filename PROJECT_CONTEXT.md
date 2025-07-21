@@ -18,14 +18,22 @@ AI-powered application management platform designed for startup accelerators. Au
 
 ## Key User Flows
 
-### 1. Accelerator Setup (One-time per program)
-1. Staff logs into platform (single shared login per accelerator)
-2. Creates new program (e.g., "TechEd Accelerator 2024")
-3. Builds custom questionnaire (max 50 questions)
-4. Completes calibration questions about startup preferences
-5. AI generates scoring guidelines based on calibration responses
-6. User reviews and modifies AI-generated guidelines
-7. System generates unique application links
+### 1. Program Management & Setup (Multi-program per organization)
+1. Staff logs into platform (single shared login per organization)
+2. **Program Management Dashboard**: View all programs with statistics and completion status
+3. **Create New Program** (unlimited programs per organization, e.g., "TechEd Accelerator 2024", "Healthcare Innovation Track", "AI/ML Program")
+4. **Select Program** → Enter program-specific workspace with independent:
+   - Questionnaire Builder (program-scoped, max 50 questions)
+   - Calibration Settings (program-specific preferences)
+   - AI Guidelines Management (generated per program)
+   - Application Management (program-isolated)
+   - Reports & Analytics (program-scoped)
+5. **Complete Program Setup** per program:
+   - Build custom questionnaire for this specific program
+   - Complete calibration questions about startup preferences for this program
+   - AI generates scoring guidelines based on program-specific calibration
+   - Review and modify AI-generated guidelines for this program
+   - System generates unique application links for this program
 
 ### 2. Startup Application
 1. Startup receives unique link (e.g., platform.com/apply/teched-2024/startup-abc123)
@@ -61,9 +69,11 @@ AI-powered application management platform designed for startup accelerators. Au
 - **Public Forms**: Next.js (mobile-responsive)
 
 ### AI Integration
-- **Primary AI**: Claude API (Anthropic)
+- **Primary AI**: OpenRouter API with developer-configurable models (Claude 3.5 Sonnet, Claude 3 Opus, Claude 3 Haiku, GPT-4 variants)
 - **Document Processing**: PyPDF2/pdfplumber
 - **Prompt Storage**: Configurable templates in database
+- **Rate Limiting**: 10 requests per organization per hour
+- **Caching**: Redis-based 24-hour TTL for guidelines generation
 
 ### Key Libraries
 - **PDF Generation**: ReportLab or Puppeteer
@@ -137,11 +147,19 @@ scores                 -- Detailed scoring breakdown
 ## Business Rules & Constraints
 
 ### Authentication & Access
-- Single user login per accelerator (shared credentials)
+- Single user login per organization (shared credentials for accelerator staff)
 - JWT-based authentication for staff access
+- Organization-level security with complete data isolation
 
-### Multi-tenancy
-- Accelerators can run multiple programs simultaneously
+### Multi-Program Architecture
+- **Unlimited Programs**: Each organization can create unlimited programs
+- **Complete Program Isolation**: Each program operates independently with:
+  - Separate questionnaires (max 50 questions per program)
+  - Independent calibration settings and AI guidelines
+  - Isolated application pools and reports
+  - Program-specific analytics and statistics
+- **No Cross-Program Data Sharing**: Programs cannot access each other's data
+- **Program-Scoped Features**: All features (questionnaires, guidelines, applications) are program-specific
 - No application deadlines (for MVP)
 - Unlimited applications per program
 
@@ -195,11 +213,12 @@ scores                 -- Detailed scoring breakdown
 ```
 DATABASE_URL=postgresql://...
 REDIS_URL=redis://...
-ANTHROPIC_API_KEY=sk-...
+OPENROUTER_API_KEY=sk-...
 OPENAI_API_KEY=sk-... (optional for PDF extraction)
 AWS_ACCESS_KEY_ID=... (if using S3)
 AWS_SECRET_ACCESS_KEY=...
 JWT_SECRET=...
+APP_DOMAIN=http://localhost:3000 (for rate limiting)
 ```
 
 ## Success Metrics
@@ -218,27 +237,41 @@ JWT_SECRET=...
 - Custom accelerator branding
 
 ## Current Status
-- Phase 3 Complete: Questionnaire Builder System
-- Phase 4.1 Complete: Calibration Questions System
-- Complete backend question system with all 4 question types (text, multiple choice, scale, file upload)
-- Full frontend questionnaire builder with drag-and-drop, preview mode, and validation
-- Comprehensive calibration system with 12 questions across 5 categories for accelerator preferences
-- Complete calibration API with progress tracking, batch processing, and completion status
-- Frontend calibration interface with category navigation and real-time progress tracking
-- Multi-tenant security maintained throughout frontend and backend
+- **Phase 1 Complete**: FastAPI foundation with authentication, database schema, and organization management
+- **Phase 2 Complete**: Authentication system and multi-tenant organization management
+- **Phase 3 Complete**: Questionnaire Builder System with all 4 question types and frontend interface
+- **Phase 4.1 Complete**: Calibration Questions System with comprehensive accelerator preferences
+- **Phase 4.2 Complete**: AI Guidelines Generation with OpenRouter API integration and Redis caching
+- **Phase 4.3 Complete**: Program Management System with multi-program architecture
+
+### Multi-Program Architecture Implementation
+- **Complete Program Management**: Create, manage, and switch between unlimited programs per organization
+- **Program-Centric Workflow**: Each program operates independently with separate questionnaires, calibration, guidelines, and applications
+- **Data Isolation**: Complete separation between programs - no cross-program data sharing
+- **Program Dashboard**: Individual program workspaces with setup progress tracking and statistics
+- **API Integration**: Program-scoped endpoints with proper multi-tenant security
+- **Frontend Navigation**: Program selection interface with program-specific feature access
+
+### Technical Implementation Complete
+- Backend: Program schemas, service layer, and REST API endpoints (7 endpoints)
+- Frontend: Program management UI, program selection, individual program dashboards
+- Database: Program-scoped relationships with proper foreign key constraints
+- Security: Multi-tenant isolation at organization and program levels
+- Testing: Comprehensive test scripts for all program management functionality
 
 ## Development Priorities
 1. ✅ Set up project structure (FastAPI + Next.js)
-2. ✅ Create database schema
+2. ✅ Create database schema with multi-program architecture
 3. ✅ Implement authentication system
-4. ✅ Build organization management
-5. ✅ Implement questionnaire builder (Complete)
-6. 🔄 Build calibration system (Task 4.1 Complete - Questions, Next: 4.2 AI Guidelines)
-7. 🔄 Create public application forms
-8. 🔄 Integrate AI processing pipeline
-9. 🔄 Develop report generation
-10. 🔄 Build staff dashboard
+4. ✅ Build organization management with multi-tenant security
+5. ✅ Implement questionnaire builder with program isolation
+6. ✅ Build complete calibration system (4.1, 4.2, 4.3 Complete)
+7. ✅ Create program management system with complete isolation
+8. 🔄 Create program-scoped public application forms
+9. 🔄 Integrate AI processing pipeline with program context
+10. 🔄 Develop program-specific report generation
+11. 🔄 Build program-centric staff dashboard
 
 ---
-*Last updated: 2025-07-19*
+*Last updated: 2025-07-21*
 *This document serves as the central reference for the VDP application build process.*
