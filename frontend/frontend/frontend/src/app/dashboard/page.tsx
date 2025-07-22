@@ -131,14 +131,6 @@ export default function DashboardPage() {
                       <Link href="/dashboard/programs" className="block w-full text-left px-4 py-2 bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 transition-colors">
                         📋 Manage Programs
                       </Link>
-                      <div className="text-sm text-gray-600 mt-4 p-3 bg-gray-50 rounded-md">
-                        <strong>Program-Centric Workflow:</strong><br/>
-                        1. Create or select a program<br/>
-                        2. Build questionnaire for that program<br/>
-                        3. Complete calibration for that program<br/>
-                        4. Generate AI guidelines for that program<br/>
-                        5. Review applications for that program
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -146,7 +138,7 @@ export default function DashboardPage() {
               
               <div className="mt-8">
                 <p className="text-sm text-gray-500">
-                  Phase 2 Task 2.1 Complete - Authentication system is working!
+                  System is working!
                 </p>
               </div>
             </div>
