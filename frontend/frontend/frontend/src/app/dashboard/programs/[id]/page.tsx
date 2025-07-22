@@ -82,7 +82,7 @@ export default function ProgramDetailPage() {
       name: 'Build Questionnaire',
       description: 'Create application questions for startups',
       completed: program.questionnaire_count > 0,
-      link: '/dashboard/questionnaires',
+      link: `/dashboard/programs/${program.id}/questionnaires`,
       icon: '📝',
       color: 'green'
     },
@@ -90,7 +90,7 @@ export default function ProgramDetailPage() {
       name: 'Complete Calibration',
       description: 'Set your accelerator preferences',
       completed: program.calibration_completion >= 100,
-      link: '/dashboard/calibration',
+      link: `/dashboard/programs/${program.id}/calibration`,
       icon: '🎯',
       color: 'yellow'
     },
@@ -98,7 +98,7 @@ export default function ProgramDetailPage() {
       name: 'Generate AI Guidelines',
       description: 'AI-powered scoring criteria',
       completed: program.has_active_guidelines,
-      link: '/dashboard/guidelines',
+      link: `/dashboard/programs/${program.id}/guidelines`,
       icon: '🤖',
       color: 'indigo'
     },
@@ -106,7 +106,7 @@ export default function ProgramDetailPage() {
       name: 'Review Applications',
       description: 'Manage startup applications',
       completed: program.application_count > 0,
-      link: '#',
+      link: `/dashboard/programs/${program.id}/applications`,
       icon: '📊',
       color: 'purple'
     }
@@ -276,9 +276,9 @@ export default function ProgramDetailPage() {
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Program Management</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Link
-              href="/dashboard/questionnaires"
+              href={`/dashboard/programs/${program.id}/questionnaires`}
               className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
             >
               <div className="flex items-center">
@@ -291,7 +291,7 @@ export default function ProgramDetailPage() {
             </Link>
 
             <Link
-              href="/dashboard/calibration"
+              href={`/dashboard/programs/${program.id}/calibration`}
               className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
             >
               <div className="flex items-center">
@@ -304,7 +304,7 @@ export default function ProgramDetailPage() {
             </Link>
 
             <Link
-              href="/dashboard/guidelines"
+              href={`/dashboard/programs/${program.id}/guidelines`}
               className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
             >
               <div className="flex items-center">
@@ -312,6 +312,19 @@ export default function ProgramDetailPage() {
                 <div>
                   <h3 className="font-medium text-gray-900">AI Guidelines</h3>
                   <p className="text-sm text-gray-600">Manage scoring guidelines</p>
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              href={`/dashboard/programs/${program.id}/applications`}
+              className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <div className="flex items-center">
+                <span className="text-2xl mr-3">📊</span>
+                <div>
+                  <h3 className="font-medium text-gray-900">Applications</h3>
+                  <p className="text-sm text-gray-600">Review and manage applications</p>
                 </div>
               </div>
             </Link>

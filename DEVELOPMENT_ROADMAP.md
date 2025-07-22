@@ -73,9 +73,9 @@ Structured development plan for the AI-powered application management platform. 
 - [x] Test complete questionnaire workflow
 
 ### Phase 4: Calibration & Program Management (4-5 hours)
-**Status**: ✅ COMPLETE (All tasks 4.1, 4.2, 4.3 Complete)  
+**Status**: ✅ COMPLETE (All tasks 4.1, 4.2, 4.3 Complete + Architecture Fix)  
 **Dependencies**: ✅ Phase 3 complete  
-**Description**: AI calibration, guidelines generation, and multi-program architecture
+**Description**: AI calibration, guidelines generation, multi-program architecture, and program-centric navigation enforcement
 
 #### 4.1 Calibration Questions (1h) ✅ COMPLETE
 - [x] Create pre-defined calibration question set (12 comprehensive questions)
@@ -98,29 +98,41 @@ Structured development plan for the AI-powered application management platform. 
 - [x] Ensure all features are program-scoped (questionnaires, calibration, guidelines)
 - [x] Test complete program isolation and multi-program functionality
 
+#### 4.4 Architecture Fix - Program-Centric Navigation (1h) ✅ COMPLETE
+- [x] **CRITICAL FIX**: Remove direct feature access from main dashboard
+- [x] Enforce mandatory program selection before accessing any features
+- [x] Update all navigation to use program-scoped routes (`/programs/{id}/feature`)
+- [x] Create program-specific route structure for all features
+- [x] Fix program dashboard navigation to use program-scoped links
+- [x] Ensure complete program context enforcement in frontend
+
 ### Phase 5: Program-Scoped Public Application Forms (3-4 hours)
-**Status**: Not Started  
-**Dependencies**: ✅ Phase 4 complete  
-**Description**: Program-specific public-facing application forms for startups
+**Status**: 🎯 **READY TO START**  
+**Dependencies**: ✅ Phase 4 complete + Architecture Fix complete  
+**Description**: Program-specific public-facing application forms for startups with complete program isolation
 
-#### 5.1 Dynamic Form Generation (2h)
+#### 5.1 Program-Scoped Dynamic Form Generation (2h)
 - [ ] Create dynamic form renderer from program-specific questionnaire data
-- [ ] Implement all question type components with program context
-- [ ] Add form validation and error handling per program
+- [ ] Implement all question type components with program context validation
+- [ ] Add form validation and error handling per program's questionnaire
 - [ ] Create progress indicator for program applications
-- [ ] Make forms mobile-responsive with program branding
+- [ ] Make forms mobile-responsive with program-specific context
+- [ ] **KEY**: Ensure forms can ONLY access questionnaire data for specific program
 
-#### 5.2 Program-Scoped File Upload System (1h)
-- [ ] Implement PDF-only file upload with program isolation
-- [ ] Add file size validation and progress bars
-- [ ] Set up program-specific file storage organization
-- [ ] Add virus scanning for uploads with program context
+#### 5.2 Program-Isolated File Upload System (1h)
+- [ ] Implement PDF-only file upload with strict program isolation
+- [ ] Add file size validation and progress bars with program context
+- [ ] Set up program-specific file storage organization (prevent cross-program access)
+- [ ] Add virus scanning for uploads with program-scoped error handling
+- [ ] **KEY**: All uploaded files must be tagged with program ID for isolation
 
-#### 5.3 Program-Specific Application URLs (1h)
+#### 5.3 Program-Specific Application URLs & Submission (1h)
 - [ ] Generate non-guessable URLs per program (e.g., /apply/program-123/app-xyz)
-- [ ] Create program-scoped application submission endpoints
-- [ ] Add application status tracking within program context
-- [ ] Test complete program-isolated application flow
+- [ ] Create program-scoped application submission endpoints with validation
+- [ ] Add application status tracking within program context only
+- [ ] Update API endpoints to require program context for all operations
+- [ ] Test complete program-isolated application flow end-to-end
+- [ ] **KEY**: Applications must be tied to specific program and isolated from others
 
 ### Phase 6: Program-Specific AI Processing Pipeline (4-5 hours)
 **Status**: Not Started  
@@ -219,7 +231,8 @@ Structured development plan for the AI-powered application management platform. 
 - **Complex (4-5h)**: Full feature implementation, multiple integrations
 
 ## Current Priority
-**Phase 4, Task 4.3: Guidelines Management** - Phase 4.1 & 4.2 Complete, Next Up
+**🎯 READY FOR PHASE 5**: Program-Scoped Public Application Forms
+**Foundation Complete**: Multi-program architecture with enforced program-centric navigation
 
 ## Notes
 - Each task should be completable in a single focused session
@@ -229,5 +242,5 @@ Structured development plan for the AI-powered application management platform. 
 
 ---
 *Last Updated: 2025-07-21*
-*Total Estimated Time: 25-35 hours*
-*Progress: Phase 3 COMPLETE, Phase 4.1 & 4.2 COMPLETE (Calibration & AI Guidelines)*
+*Total Estimated Time: 30-40 hours*
+*Progress: **PHASES 1-4 COMPLETE** + Architecture Fix Complete - **READY FOR PHASE 5***

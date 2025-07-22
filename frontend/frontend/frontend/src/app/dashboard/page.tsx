@@ -126,23 +126,19 @@ export default function DashboardPage() {
                   </div>
                   
                   <div>
-                    <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
+                    <h3 className="text-lg font-semibold mb-4">Get Started</h3>
                     <div className="space-y-2">
                       <Link href="/dashboard/programs" className="block w-full text-left px-4 py-2 bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 transition-colors">
                         📋 Manage Programs
                       </Link>
-                      <Link href="/dashboard/questionnaires" className="block w-full text-left px-4 py-2 bg-green-50 text-green-700 rounded-md hover:bg-green-100 transition-colors">
-                        📝 Build Questionnaire
-                      </Link>
-                      <Link href="/dashboard/calibration" className="block w-full text-left px-4 py-2 bg-yellow-50 text-yellow-700 rounded-md hover:bg-yellow-100 transition-colors">
-                        🎯 Accelerator Calibration
-                      </Link>
-                      <Link href="/dashboard/guidelines" className="block w-full text-left px-4 py-2 bg-indigo-50 text-indigo-700 rounded-md hover:bg-indigo-100 transition-colors">
-                        🤖 AI Guidelines
-                      </Link>
-                      <button className="w-full text-left px-4 py-2 bg-purple-50 text-purple-700 rounded-md hover:bg-purple-100 transition-colors">
-                        📊 View Reports
-                      </button>
+                      <div className="text-sm text-gray-600 mt-4 p-3 bg-gray-50 rounded-md">
+                        <strong>Program-Centric Workflow:</strong><br/>
+                        1. Create or select a program<br/>
+                        2. Build questionnaire for that program<br/>
+                        3. Complete calibration for that program<br/>
+                        4. Generate AI guidelines for that program<br/>
+                        5. Review applications for that program
+                      </div>
                     </div>
                   </div>
                 </div>

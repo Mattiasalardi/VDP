@@ -20,40 +20,43 @@ AI-powered application management platform designed for startup accelerators. Au
 
 ### 1. Program Management & Setup (Multi-program per organization)
 1. Staff logs into platform (single shared login per organization)
-2. **Program Management Dashboard**: View all programs with statistics and completion status
-3. **Create New Program** (unlimited programs per organization, e.g., "TechEd Accelerator 2024", "Healthcare Innovation Track", "AI/ML Program")
-4. **Select Program** → Enter program-specific workspace with independent:
-   - Questionnaire Builder (program-scoped, max 50 questions)
-   - Calibration Settings (program-specific preferences)
-   - AI Guidelines Management (generated per program)
-   - Application Management (program-isolated)
-   - Reports & Analytics (program-scoped)
-5. **Complete Program Setup** per program:
-   - Build custom questionnaire for this specific program
-   - Complete calibration questions about startup preferences for this program
-   - AI generates scoring guidelines based on program-specific calibration
-   - Review and modify AI-generated guidelines for this program
-   - System generates unique application links for this program
+2. **Main Dashboard** → **"Manage Programs"** (program selection is mandatory - no direct feature access)
+3. **Program Management Dashboard**: View all programs with statistics and completion status
+4. **Create New Program** (unlimited programs per organization, e.g., "TechEd Accelerator 2024", "Healthcare Innovation Track", "AI/ML Program")
+5. **Select Program** → **Individual Program Dashboard** → Enter program-specific workspace with complete isolation:
+   - Program-Scoped Questionnaire Builder (`/dashboard/programs/{id}/questionnaires`)
+   - Program-Specific Calibration Settings (`/dashboard/programs/{id}/calibration`)
+   - Program-Isolated AI Guidelines Management (`/dashboard/programs/{id}/guidelines`)
+   - Program-Exclusive Application Management (`/dashboard/programs/{id}/applications`)
+   - Program-Dedicated Reports & Analytics (future)
+6. **Complete Program Setup** per program (enforced program-centric workflow):
+   - Navigate to program dashboard first
+   - Build custom questionnaire for this specific program only
+   - Complete calibration questions about startup preferences for this program only
+   - AI generates scoring guidelines based on program-specific calibration only
+   - Review and modify AI-generated guidelines for this program only
+   - System generates unique application links for this program only
 
-### 2. Startup Application
-1. Startup receives unique link (e.g., platform.com/apply/teched-2024/startup-abc123)
-2. Fills out questionnaire (text, multiple choice, scale, file uploads)
-3. Uploads PDF documents (generous size limit)
-4. Submits application
-5. System immediately processes application
+### 2. Startup Application (Program-Specific)
+1. Startup receives unique program-specific link (e.g., platform.com/apply/program-123/startup-abc456)
+2. Fills out questionnaire designed specifically for that program (text, multiple choice, scale, file uploads)
+3. Uploads PDF documents (generous size limit) - stored with program context
+4. Submits application to specific program only
+5. System immediately processes application using that program's AI guidelines only
 
-### 3. AI Processing Pipeline
-1. Extracts text from uploaded PDFs
-2. Analyzes responses using pre-generated scoring guidelines
-3. Generates scores for various criteria
-4. Creates comprehensive PDF report
-5. Stores everything in database
+### 3. AI Processing Pipeline (Program-Isolated)
+1. Extracts text from uploaded PDFs with program context
+2. Analyzes responses using program-specific scoring guidelines only
+3. Generates scores based on that program's criteria only
+4. Creates comprehensive PDF report using program's template
+5. Stores everything in database with program isolation
 
-### 4. Review and Decision Making
-1. Staff views generated reports in dashboard
-2. Reviews scores, summaries, and highlighted concerns
-3. Can override AI scores if needed
-4. Ranks startups in sortable table for comparison
+### 4. Review and Decision Making (Program-Scoped)
+1. Staff navigates to specific program dashboard
+2. Views applications and reports only for that program
+3. Reviews scores, summaries, and concerns using program-specific criteria
+4. Can override AI scores within program context
+5. Ranks startups only against others in the same program
 
 ## Technical Architecture
 
@@ -238,26 +241,30 @@ APP_DOMAIN=http://localhost:3000 (for rate limiting)
 
 ## Current Status
 - **Phase 1 Complete**: FastAPI foundation with authentication, database schema, and organization management
-- **Phase 2 Complete**: Authentication system and multi-tenant organization management
+- **Phase 2 Complete**: Authentication system and multi-tenant organization management  
 - **Phase 3 Complete**: Questionnaire Builder System with all 4 question types and frontend interface
 - **Phase 4.1 Complete**: Calibration Questions System with comprehensive accelerator preferences
 - **Phase 4.2 Complete**: AI Guidelines Generation with OpenRouter API integration and Redis caching
 - **Phase 4.3 Complete**: Program Management System with multi-program architecture
+- **Architecture Fix Complete**: Program-centric navigation and complete data isolation enforcement
 
 ### Multi-Program Architecture Implementation
 - **Complete Program Management**: Create, manage, and switch between unlimited programs per organization
-- **Program-Centric Workflow**: Each program operates independently with separate questionnaires, calibration, guidelines, and applications
-- **Data Isolation**: Complete separation between programs - no cross-program data sharing
-- **Program Dashboard**: Individual program workspaces with setup progress tracking and statistics
-- **API Integration**: Program-scoped endpoints with proper multi-tenant security
-- **Frontend Navigation**: Program selection interface with program-specific feature access
+- **Enforced Program-Centric Workflow**: Users MUST select program first - no direct feature access from main dashboard
+- **Complete Data Isolation**: Programs operate in complete isolation with no cross-program data sharing or access
+- **Program-Scoped Navigation**: All features accessible only through program-specific routes (`/programs/{id}/feature`)
+- **Individual Program Dashboards**: Dedicated workspaces with setup progress tracking and program-specific statistics
+- **Program-Isolated API Integration**: All endpoints properly scoped to program context with multi-tenant security
+- **Mandatory Program Context**: Frontend enforces program selection before accessing any features
 
 ### Technical Implementation Complete
-- Backend: Program schemas, service layer, and REST API endpoints (7 endpoints)
-- Frontend: Program management UI, program selection, individual program dashboards
-- Database: Program-scoped relationships with proper foreign key constraints
-- Security: Multi-tenant isolation at organization and program levels
-- Testing: Comprehensive test scripts for all program management functionality
+- **Backend**: Program schemas, service layer, and REST API endpoints (7 endpoints) with complete program isolation
+- **Frontend**: Program management UI, enforced program selection, individual program dashboards, program-scoped feature routes
+- **Navigation Architecture**: Program-centric route structure (`/dashboard/programs/{id}/{feature}`) replacing global feature access
+- **Database**: Program-scoped relationships with proper foreign key constraints ensuring complete data isolation
+- **Security**: Multi-tenant isolation at organization and program levels with mandatory program context validation
+- **User Experience**: Enforced program-centric workflow preventing access to features without program selection
+- **Testing**: Comprehensive test scripts for all program management functionality and data isolation
 
 ## Development Priorities
 1. ✅ Set up project structure (FastAPI + Next.js)
@@ -267,10 +274,15 @@ APP_DOMAIN=http://localhost:3000 (for rate limiting)
 5. ✅ Implement questionnaire builder with program isolation
 6. ✅ Build complete calibration system (4.1, 4.2, 4.3 Complete)
 7. ✅ Create program management system with complete isolation
-8. 🔄 Create program-scoped public application forms
-9. 🔄 Integrate AI processing pipeline with program context
-10. 🔄 Develop program-specific report generation
-11. 🔄 Build program-centric staff dashboard
+8. ✅ **ARCHITECTURE FIX**: Enforce program-centric navigation and data isolation
+9. 🔄 **PHASE 5**: Create program-scoped public application forms
+10. 🔄 Integrate AI processing pipeline with program context
+11. 🔄 Develop program-specific report generation
+12. 🔄 Build program-centric staff dashboard
+
+## Ready for Phase 5
+**Foundation Status**: ✅ **COMPLETE** - Multi-program architecture with enforced data isolation and program-centric workflow
+**Next Step**: Phase 5 - Program-Scoped Public Application Forms
 
 ---
 *Last updated: 2025-07-21*
