@@ -55,10 +55,10 @@ Core tables: organizations, programs, questionnaires, questions, calibration_ans
 - `python3 scripts/manage_db.py seed-data` - Create seed data with test credentials
 
 ## Current Development Status
-**Phase**: 4 Complete - Calibration System & Multi-Program Architecture + Architecture Fix Complete
+**Phase**: 4 Complete - Calibration System & Multi-Program Architecture + Questionnaire Integration Fix Complete
 **Next Phase**: 5 - Program-Scoped Public Application Forms (READY TO START)
 **Total Phases**: 9 phases, estimated 30-40 hours total
-**Dependencies**: Phase 1 ✅, Phase 2 ✅, Phase 3 ✅, Phase 4 ✅ (4.1 Calibration, 4.2 AI Guidelines, 4.3 Program Management, 4.4 Architecture Fix all complete)
+**Dependencies**: Phase 1 ✅, Phase 2 ✅, Phase 3 ✅, Phase 4 ✅ (4.1 Calibration, 4.2 AI Guidelines, 4.3 Program Management, 4.4 Architecture Fix, 4.5 Questionnaire Integration Fix all complete)
 
 ## File Structure Created
 - `PROJECT_CONTEXT.md` - Complete project requirements and architecture
@@ -400,8 +400,64 @@ Core tables: organizations, programs, questionnaires, questions, calibration_ans
 **✅ User Experience**: Program selection mandatory, complete data isolation maintained
 **✅ Security**: Multi-tenant isolation at organization AND program levels
 
+## Phase 4 Task 4.5 Complete - Questionnaire Builder Integration Fix
+
+### Critical Integration Issues Resolved
+**ISSUE IDENTIFIED**: After implementing the program-centric architecture, the existing 4-type questionnaire builder was no longer accessible from the program dashboard. Users could create questionnaires but encountered 500 errors when trying to access the builder.
+
+### Problems Found and Fixed
+**Backend API Issues:**
+- **Serialization Error**: Questionnaire detail endpoint was returning SQLAlchemy Question objects instead of serializable dictionaries
+- **Response Format Mismatch**: Frontend expected wrapped response format but backend returned direct objects
+- **Missing CRUD Endpoints**: Questionnaire management endpoints were not properly connected to program-scoped routes
+
+**Frontend Integration Issues:**
+- **API Format Incompatibility**: Questionnaire builder was using old API response format expectations
+- **Navigation Disconnection**: Builder navigation was not program-aware, breaking the user flow
+- **Route Mismatch**: Questionnaire creation was trying to redirect to builder with wrong URL structure
+
+### Technical Solutions Implemented
+**Backend Fixes:**
+- **Fixed Serialization**: Updated `QuestionnaireService.get_questionnaire_with_questions()` to convert SQLAlchemy Question objects to dictionaries (questionnaire_service.py:110-125)
+- **Updated API Response**: Modified questionnaire detail endpoint to properly create Pydantic models from dictionary data (questions.py:452)
+- **Completed CRUD Integration**: Added missing questionnaire endpoints with proper program scoping and multi-tenant security
+
+**Frontend Integration:**
+- **Updated API Calls**: Modified questionnaire builder to work with new direct API response format (builder/page.tsx:57)
+- **Program-Aware Navigation**: Added programId parameter support and updated back navigation to be program-scoped (builder/page.tsx:44, 226-228)
+- **Fixed Builder Access**: Updated questionnaire creation flow to properly redirect to builder with correct parameters
+
+### Comprehensive Testing Results
+**End-to-End Workflow Verified:**
+- ✅ **Login System**: Authentication working with proper JWT token handling
+- ✅ **Program Selection**: Program listing and selection functioning correctly
+- ✅ **Questionnaire Creation**: Can create new questionnaires from program dashboard
+- ✅ **Builder Access**: 4-type questionnaire builder (text, multiple choice, scale, file upload) fully accessible
+- ✅ **API Integration**: All questionnaire CRUD operations working without errors
+- ✅ **Data Isolation**: Program-scoped data separation maintained throughout
+
+**Test Script Results:**
+- Created integration test script (`backend/scripts/test_questionnaire_workflow.py`)
+- All 5 test steps passed: login, programs, create questionnaire, get details, list questionnaires
+- Backend logs show clean API responses with no 500 errors
+- Complete user flow validated: Dashboard → Programs → Select Program → Questionnaires → Builder
+
+### User Flow Now Working
+**Complete Workflow Restored:**
+1. **Dashboard** → **"📋 Manage Programs"**
+2. **Programs List** → **Select Program** → **Program Dashboard**
+3. **Program Dashboard** → **"📝 Questionnaires"**
+4. **Questionnaire List** → **"Create Questionnaire"** → **Name & Describe**
+5. **"Create & Build"** → **4-Type Question Builder** → **Build Complete Questionnaires**
+
+### Key Files Modified
+- `backend/app/services/questionnaire_service.py` - Fixed serialization issues
+- `backend/app/api/v1/endpoints/questions.py` - Updated response handling
+- `frontend/src/app/dashboard/questionnaires/builder/page.tsx` - Fixed API integration and navigation
+- `backend/scripts/test_questionnaire_workflow.py` - Comprehensive testing validation
+
 ### Ready for Phase 5
-The multi-program architecture foundation is now completely solid with enforced program-centric navigation. All data isolation is maintained and validated. Phase 5 can proceed with confidence that the program architecture will properly isolate all public application forms and submissions.
+The program-centric architecture is now completely functional with all existing features properly integrated. The questionnaire builder with its 4 question types is fully accessible through the program workflow. All data isolation is maintained and validated. Phase 5 can proceed with confidence that the program architecture will properly support public application forms and submissions.
 
 ---
-*This file serves as my persistent memory for the VDP project. Updated: 2025-07-21*
+*This file serves as my persistent memory for the VDP project. Updated: 2025-07-22*

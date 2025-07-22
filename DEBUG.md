@@ -238,5 +238,42 @@ lsof -ti :3001 | xargs kill -9  # Frontend (port 3001)
 ```
 **Context**: Always stop cleanly to avoid port conflicts on restart
 
+### [API & Backend] Questionnaire Builder Integration Broken After Program Architecture Migration
+**Problem**: After implementing program-centric architecture, existing 4-type questionnaire builder became inaccessible with 500 serialization errors
+**Solution**: Fixed three critical integration issues:
+
+1. **Backend Serialization Fix** (`backend/app/services/questionnaire_service.py`):
+```python
+# Lines 110-125: Convert SQLAlchemy objects to dicts
+questions_data = []
+for q in questions:
+    questions_data.append({
+        "id": q.id, "question_type": q.question_type, "text": q.text,
+        "options": q.options, "is_required": q.is_required,
+        "order_index": q.order_index, "validation_rules": q.validation_rules,
+        "questionnaire_id": q.questionnaire_id,
+        "created_at": q.created_at, "updated_at": q.updated_at
+    })
+```
+
+2. **API Response Format Fix** (`backend/app/api/v1/endpoints/questions.py`):
+```python
+# Line 452: Create Pydantic model from dict
+return QuestionnaireDetailResponse(**questionnaire_data)
+```
+
+3. **Frontend API Integration Fix** (`frontend/src/app/dashboard/questionnaires/builder/page.tsx`):
+```javascript
+// Line 57: Direct response handling (removed .success wrapper)
+const data = await apiService.get(`/questions/questionnaires/${questionnaireId}`);
+
+// Lines 44, 226-228: Program-aware navigation
+const programId = searchParams.get('programId');
+href={programId ? `/dashboard/programs/${programId}/questionnaires` : "/dashboard/questionnaires"}
+```
+
+**Test Validation**: Created `backend/scripts/test_questionnaire_workflow.py` - all 5 steps pass
+**Context**: Happens when architectural changes break existing feature integrations. Always test complete user flows after major changes.
+
 ---
 *Debug entries will be added as we encounter and solve issues during development.*

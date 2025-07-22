@@ -72,10 +72,10 @@ Structured development plan for the AI-powered application management platform. 
 - [x] Add questionnaire duplication feature
 - [x] Test complete questionnaire workflow
 
-### Phase 4: Calibration & Program Management (4-5 hours)
-**Status**: ✅ COMPLETE (All tasks 4.1, 4.2, 4.3 Complete + Architecture Fix)  
+### Phase 4: Calibration & Program Management (5-6 hours)
+**Status**: ✅ COMPLETE (All tasks 4.1, 4.2, 4.3, 4.4, 4.5 Complete)  
 **Dependencies**: ✅ Phase 3 complete  
-**Description**: AI calibration, guidelines generation, multi-program architecture, and program-centric navigation enforcement
+**Description**: AI calibration, guidelines generation, multi-program architecture, program-centric navigation enforcement, and questionnaire builder integration fix
 
 #### 4.1 Calibration Questions (1h) ✅ COMPLETE
 - [x] Create pre-defined calibration question set (12 comprehensive questions)
@@ -106,9 +106,18 @@ Structured development plan for the AI-powered application management platform. 
 - [x] Fix program dashboard navigation to use program-scoped links
 - [x] Ensure complete program context enforcement in frontend
 
+#### 4.5 Questionnaire Builder Integration Fix (1h) ✅ COMPLETE
+- [x] **CRITICAL FIX**: Restore access to 4-type questionnaire builder from program dashboard
+- [x] Fix backend serialization error in questionnaire detail endpoint (SQLAlchemy to dict conversion)
+- [x] Update API response format handling to work with Pydantic models
+- [x] Fix frontend API integration to work with new response format
+- [x] Make questionnaire builder program-aware with proper navigation context
+- [x] Validate complete user flow: Dashboard → Programs → Questionnaires → Builder
+- [x] Create comprehensive integration test script for workflow validation
+
 ### Phase 5: Program-Scoped Public Application Forms (3-4 hours)
 **Status**: 🎯 **READY TO START**  
-**Dependencies**: ✅ Phase 4 complete + Architecture Fix complete  
+**Dependencies**: ✅ Phase 4 complete + Architecture Fix + Questionnaire Integration Fix complete  
 **Description**: Program-specific public-facing application forms for startups with complete program isolation
 
 #### 5.1 Program-Scoped Dynamic Form Generation (2h)

@@ -41,13 +41,32 @@ export default function QuestionnaireBuilderPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const questionnaireId = searchParams.get('id');
+  const programId = searchParams.get('programId');
 
   useEffect(() => {
     if (questionnaireId) {
-      // TODO: Load existing questionnaire
-      console.log('Loading questionnaire:', questionnaireId);
+      loadQuestionnaire();
     }
   }, [questionnaireId]);
+
+  const loadQuestionnaire = async () => {
+    if (!questionnaireId) return;
+    
+    setLoading(true);
+    try {
+      const data = await apiService.get(`/questions/questionnaires/${questionnaireId}`);
+      setQuestionnaire({
+        id: data.id,
+        title: data.name,
+        description: data.description || '',
+        questions: data.questions || []
+      });
+    } catch (error: any) {
+      console.error('Error loading questionnaire:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const addQuestion = (type: Question['question_type']) => {
     if (questionnaire.questions.length >= 50) {
@@ -203,7 +222,10 @@ export default function QuestionnaireBuilderPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center space-x-4">
-              <Link href="/dashboard/questionnaires" className="text-gray-600 hover:text-gray-900">
+              <Link 
+                href={programId ? `/dashboard/programs/${programId}/questionnaires` : "/dashboard/questionnaires"} 
+                className="text-gray-600 hover:text-gray-900"
+              >
                 ← Back to Questionnaires
               </Link>
               <h1 className="text-xl font-semibold text-gray-900">

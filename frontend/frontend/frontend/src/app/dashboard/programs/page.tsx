@@ -122,6 +122,12 @@ export default function ProgramsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
+          <Link
+            href="/dashboard"
+            className="text-blue-600 hover:text-blue-800 text-sm font-medium mb-4 inline-block"
+          >
+            ← Back to Dashboard
+          </Link>
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Program Management</h1>

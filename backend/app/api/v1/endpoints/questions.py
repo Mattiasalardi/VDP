@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import and_
 
 from app.api.deps.auth import get_current_organization
-from app.api.deps.organization import get_organization_context
+from app.api.deps.organization import get_organization_context, get_organization_program
 from app.core.database import get_db
 from app.models.organization import Organization
 from app.models.questionnaire import Questionnaire
@@ -16,6 +16,14 @@ from app.schemas.question import (
     QuestionListResponse,
     QuestionReorderRequest
 )
+from app.schemas.questionnaire import (
+    QuestionnaireCreate,
+    QuestionnaireUpdate,
+    QuestionnaireResponse,
+    QuestionnaireListResponse,
+    QuestionnaireDetailResponse
+)
+from app.services.questionnaire_service import QuestionnaireService
 
 router = APIRouter()
 
@@ -354,3 +362,150 @@ def reorder_questions(
     db.commit()
     
     return {"detail": "Questions reordered successfully"}
+
+
+# ===== QUESTIONNAIRE ENDPOINTS =====
+
+@router.get("/programs/{program_id}/questionnaires", response_model=QuestionnaireListResponse)
+def get_program_questionnaires(
+    program_id: int,
+    include_inactive: bool = False,
+    db: Session = Depends(get_db),
+    current_org: Organization = Depends(get_current_organization)
+):
+    """Get all questionnaires for a program"""
+    # Verify program belongs to current organization
+    program = get_organization_program(db, current_org.id, program_id)
+    if not program:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Program not found"
+        )
+    
+    questionnaires = QuestionnaireService.get_questionnaires_by_program(
+        db=db,
+        program_id=program_id,
+        organization_id=current_org.id,
+        include_inactive=include_inactive
+    )
+    
+    # Add question count to each questionnaire
+    for questionnaire in questionnaires:
+        question_count = db.query(Question).filter(
+            Question.questionnaire_id == questionnaire.id
+        ).count()
+        questionnaire.question_count = question_count
+    
+    return QuestionnaireListResponse(
+        questionnaires=questionnaires,
+        total_count=len(questionnaires)
+    )
+
+
+@router.post("/programs/{program_id}/questionnaires", response_model=QuestionnaireResponse)
+def create_questionnaire(
+    program_id: int,
+    questionnaire_data: QuestionnaireCreate,
+    db: Session = Depends(get_db),
+    current_org: Organization = Depends(get_current_organization)
+):
+    """Create a new questionnaire for a program"""
+    # Verify program belongs to current organization
+    program = get_organization_program(db, current_org.id, program_id)
+    if not program:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Program not found"
+        )
+    
+    questionnaire = QuestionnaireService.create_questionnaire(
+        db=db,
+        questionnaire_data=questionnaire_data,
+        program_id=program_id,
+        organization_id=current_org.id
+    )
+    
+    questionnaire.question_count = 0  # New questionnaire has no questions
+    return questionnaire
+
+
+@router.get("/questionnaires/{questionnaire_id}", response_model=QuestionnaireDetailResponse)
+def get_questionnaire(
+    questionnaire_id: int,
+    db: Session = Depends(get_db),
+    current_org: Organization = Depends(get_current_organization)
+):
+    """Get a specific questionnaire with its questions"""
+    questionnaire_data = QuestionnaireService.get_questionnaire_with_questions(
+        db=db,
+        questionnaire_id=questionnaire_id,
+        organization_id=current_org.id
+    )
+    
+    if not questionnaire_data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Questionnaire not found"
+        )
+    
+    # Create Pydantic model from dict
+    return QuestionnaireDetailResponse(**questionnaire_data)
+
+
+@router.put("/questionnaires/{questionnaire_id}", response_model=QuestionnaireResponse)
+def update_questionnaire(
+    questionnaire_id: int,
+    questionnaire_data: QuestionnaireUpdate,
+    db: Session = Depends(get_db),
+    current_org: Organization = Depends(get_current_organization)
+):
+    """Update a questionnaire"""
+    questionnaire = QuestionnaireService.get_questionnaire_by_id(
+        db=db,
+        questionnaire_id=questionnaire_id,
+        organization_id=current_org.id
+    )
+    
+    if not questionnaire:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Questionnaire not found"
+        )
+    
+    updated_questionnaire = QuestionnaireService.update_questionnaire(
+        db=db,
+        questionnaire=questionnaire,
+        questionnaire_data=questionnaire_data
+    )
+    
+    # Add question count
+    question_count = db.query(Question).filter(
+        Question.questionnaire_id == questionnaire_id
+    ).count()
+    updated_questionnaire.question_count = question_count
+    
+    return updated_questionnaire
+
+
+@router.delete("/questionnaires/{questionnaire_id}")
+def delete_questionnaire(
+    questionnaire_id: int,
+    db: Session = Depends(get_db),
+    current_org: Organization = Depends(get_current_organization)
+):
+    """Delete a questionnaire (soft delete)"""
+    questionnaire = QuestionnaireService.get_questionnaire_by_id(
+        db=db,
+        questionnaire_id=questionnaire_id,
+        organization_id=current_org.id
+    )
+    
+    if not questionnaire:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Questionnaire not found"
+        )
+    
+    QuestionnaireService.delete_questionnaire(db=db, questionnaire=questionnaire)
+    
+    return {"detail": "Questionnaire deleted successfully"}
