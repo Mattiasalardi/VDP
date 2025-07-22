@@ -115,10 +115,10 @@ Structured development plan for the AI-powered application management platform. 
 - [x] Validate complete user flow: Dashboard → Programs → Questionnaires → Builder
 - [x] Create comprehensive integration test script for workflow validation
 
-### Phase 5: Program-Scoped Public Application Forms (3-4 hours)
+### Phase 5: Program-Scoped Public Application Forms & Applicant Management (4-5 hours)
 **Status**: 🎯 **READY TO START**  
 **Dependencies**: ✅ Phase 4 complete + Architecture Fix + Questionnaire Integration Fix complete  
-**Description**: Program-specific public-facing application forms for startups with complete program isolation
+**Description**: Program-specific public-facing application forms for startups AND applicant management "spreadsheet" interface with complete program isolation
 
 #### 5.1 Program-Scoped Dynamic Form Generation (2h)
 - [ ] Create dynamic form renderer from program-specific questionnaire data
@@ -143,10 +143,30 @@ Structured development plan for the AI-powered application management platform. 
 - [ ] Test complete program-isolated application flow end-to-end
 - [ ] **KEY**: Applications must be tied to specific program and isolated from others
 
+#### 5.4 Applicant Management "Spreadsheet" Interface (1-2h)
+- [ ] **Create Application Entry System**: Manual entry form for staff to add:
+  - Startup name and contact email
+  - Select questionnaire to send (from program's available questionnaires)
+  - Generate and send unique application links
+- [ ] **Real-Time Activity Tracking**: Status tracking system showing:
+  - Application status: "Not Sent", "Sent", "Completed", "Processing", "Report Ready"
+  - Submitted date/time stamps
+  - Links to generated reports (when available)
+- [ ] **Color-Coded Scoring Display**: 
+  - Total ranking score (0-10) with color gradient (0=red, 10=green)
+  - Visual indicators for quick score assessment
+- [ ] **Sorting & Filtering Capabilities**:
+  - Sort by startup name, application date, total score
+  - Filter by completion status (completed vs pending)
+  - Quick toggle views and search functionality
+- [ ] **Spreadsheet-Like Interface**: Clean table layout resembling spreadsheet for familiar UX
+- [ ] **Export Functionality**: Download applicant data and reports
+- [ ] **KEY**: Complete program isolation - only see applicants for current program
+
 ### Phase 6: Program-Specific AI Processing Pipeline (4-5 hours)
 **Status**: Not Started  
-**Dependencies**: Phase 5 complete  
-**Description**: Program-scoped AI analysis and scoring system
+**Dependencies**: Phase 5 complete (including applicant management interface)  
+**Description**: Program-scoped AI analysis and scoring system (AI #2 - Application Processing)
 
 #### 6.1 Program-Scoped PDF Processing (1h)
 - [ ] Set up PDF text extraction with program context
@@ -154,28 +174,32 @@ Structured development plan for the AI-powered application management platform. 
 - [ ] Handle corrupted/unreadable PDFs with program-specific error handling
 - [ ] Test with various PDF formats within program isolation
 
-#### 6.2 Program-Specific AI Analysis Engine (2-3h)
-- [ ] Create AI analysis prompts using program-specific guidelines
-- [ ] Implement OpenRouter API calls with program context
-- [ ] Build scoring logic based on program's calibration-generated guidelines
-- [ ] Add error handling for AI failures per program
-- [ ] Create background job processing with program isolation
+#### 6.2 Program-Specific AI Analysis Engine (AI #2 - Questionnaire Processing) (2-3h)
+- [ ] **Create AI #2 Analysis Prompts**: "Read questionnaire questions + startup answers + PDF text + program guidelines → generate report"
+- [ ] Implement OpenRouter API calls with program context using existing calibration-generated guidelines
+- [ ] Build scoring logic that applies importance weights from calibration (e.g., 5/10 revenue, 10/10 team, 1/10 innovation)
+- [ ] **Automatic Processing**: Trigger AI #2 immediately when startup submits application
+- [ ] Create background job processing with program isolation and status updates to applicant management interface
+- [ ] Add error handling for AI failures per program with status updates
 
-#### 6.3 Program-Scoped Score Calculation & Storage (1h)
-- [ ] Implement 1-10 scoring scale per program's criteria
+#### 6.3 Program-Scoped Score Calculation & Applicant Management Integration (1h)
+- [ ] Implement 1-10 scoring scale per program's criteria based on calibration importance weights
 - [ ] Store detailed scoring breakdown within program context
+- [ ] **Update Applicant Management Interface**: Send overall score (0-10) back to "spreadsheet" with color coding
+- [ ] **Status Updates**: Update application status from "Processing" → "Report Ready" in applicant management
 - [ ] Add program-specific score justification storage
-- [ ] Test scoring consistency within each program's guidelines
+- [ ] Test scoring consistency within each program's guidelines and applicant interface updates
 
 ### Phase 7: Program-Specific Report Generation (3-4 hours)
 **Status**: Not Started  
 **Dependencies**: Phase 6 complete  
 **Description**: Program-scoped PDF report generation with program-specific templates
 
-#### 7.1 Program-Specific Report Template Structure (1h)
-- [ ] Create 10-section report template per program
-- [ ] Implement program-scoped report data aggregation
-- [ ] Add overall score calculation based on program's guidelines
+#### 7.1 Fixed Report Template Structure (1h)
+- [ ] **Create Fixed 10-Section Report Template**: Overall score + Problem-Solution Fit + Customer Profile + Product & Technology + Team Assessment + Market Opportunity + Competition & Differentiation + Financial Overview + Validation & Achievements + Areas for Investigation
+- [ ] Implement program-scoped report data aggregation using AI #2 analysis results
+- [ ] **Auto-populate Report Fields**: Extract startup name, founder names, etc. from questionnaire answers
+- [ ] Add overall score calculation based on program's calibration-generated guidelines
 - [ ] Test report data completeness within program context
 
 #### 7.2 Program-Scoped PDF Generation (2h)
@@ -184,32 +208,33 @@ Structured development plan for the AI-powered application management platform. 
 - [ ] Add charts/graphs for scores based on program criteria
 - [ ] Implement program-isolated report storage system
 
-#### 7.3 Program-Specific Report Management (1h)
+#### 7.3 Program-Specific Report Management & Applicant Interface Integration (1h)
 - [ ] Add program-scoped report download endpoints
+- [ ] **Integrate with Applicant Management**: Add "View Report" links in applicant spreadsheet interface
+- [ ] **Individual & Bulk Downloads**: Download single reports or bulk export from applicant management
 - [ ] Create bulk report generation per program
 - [ ] Test report generation performance within program isolation (<30s requirement)
+- [ ] **Status Integration**: Ensure report links appear in applicant interface when reports are ready
 
-### Phase 8: Program-Centric Dashboard & Analytics (3-4 hours)
+### Phase 8: Enhanced Applicant Management & Analytics (2-3 hours)
 **Status**: Not Started  
 **Dependencies**: Phase 7 complete  
-**Description**: Program-specific staff dashboard for application management
+**Description**: Enhanced applicant management interface features and program analytics
 
-#### 8.1 Program-Scoped Application Listing (2h)
-- [ ] Create program-specific sortable application table
-- [ ] Add filtering and search functionality within program context
-- [ ] Implement pagination for large datasets per program
-- [ ] Add program-specific quick stats display and comparison
+#### 8.1 Advanced Applicant Management Features (1-2h)
+- [ ] **Score Override Functionality**: Allow staff to manually adjust AI scores in applicant interface
+- [ ] **Application Comparison Tools**: Side-by-side comparison of multiple startups within program
+- [ ] **Advanced Filtering**: Filter by score ranges, submission dates, processing status
+- [ ] **Ranking System**: Auto-rank all applications by total score with visual indicators
+- [ ] **Notes & Comments**: Add staff notes and internal comments per application
+- [ ] **Batch Operations**: Bulk status updates, bulk report downloads, batch processing
 
-#### 8.2 Program-Specific Application Details (1h)
-- [ ] Build program-scoped application detail view
-- [ ] Add score override functionality based on program guidelines
-- [ ] Create application comparison tools within program
-- [ ] Test dashboard performance with multiple programs
-
-#### 8.3 Program-Isolated Bulk Operations (1h)
-- [ ] Add bulk report downloads per program
-- [ ] Create batch processing status within program context
-- [ ] Test concurrent processing capability across multiple programs
+#### 8.2 Program Analytics Dashboard (1h)
+- [ ] **Program Statistics**: Average scores, application volume trends, completion rates
+- [ ] **Score Distribution Charts**: Visual breakdown of application scores across categories
+- [ ] **Time-to-Process Metrics**: Track processing times and bottlenecks
+- [ ] **Program Performance Comparison**: Compare metrics across multiple programs (if user has multiple)
+- [ ] **Export Analytics**: Download program analytics and insights
 
 ### Phase 9: Multi-Program Testing & Optimization (2-3 hours)
 **Status**: Not Started  
@@ -222,11 +247,13 @@ Structured development plan for the AI-powered application management platform. 
 - [ ] Add caching for frequent operations with program isolation
 - [ ] Measure and optimize report generation time per program
 
-#### 9.2 Integration Testing (1h)
-- [ ] Test complete end-to-end workflows
-- [ ] Validate AI processing accuracy
-- [ ] Test error handling and recovery
-- [ ] Security testing for public forms
+#### 9.2 Complete End-to-End Integration Testing (1h)
+- [ ] **Full User Journey Testing**: Login → Program Setup → Calibration → Questionnaire → Add Applicants → Public Form → AI Processing → Report Generation → Applicant Management
+- [ ] **Validate AI Processing Accuracy**: Test AI #1 (Calibration→Guidelines) and AI #2 (Questionnaire→Report) with real data
+- [ ] **Multi-Program Isolation Testing**: Ensure complete data separation between programs
+- [ ] **Applicant Management Interface Testing**: Test all sorting, filtering, scoring, and status update features
+- [ ] **Error Handling and Recovery**: Test failure scenarios in AI processing and applicant status updates
+- [ ] **Security Testing**: Public form security, program isolation, data protection
 
 #### 9.3 Production Preparation (1h)
 - [ ] Set up production environment variables

@@ -29,13 +29,16 @@ AI-powered application management platform designed for startup accelerators. Au
    - Program-Isolated AI Guidelines Management (`/dashboard/programs/{id}/guidelines`)
    - Program-Exclusive Application Management (`/dashboard/programs/{id}/applications`)
    - Program-Dedicated Reports & Analytics (future)
-6. **Complete Program Setup** per program (enforced program-centric workflow):
+6. **Complete Program Setup** per program (enforced program-centric workflow with mandatory onboarding):
    - Navigate to program dashboard first
-   - Build custom questionnaire for this specific program only
-   - Complete calibration questions about startup preferences for this program only
-   - AI generates scoring guidelines based on program-specific calibration only
-   - Review and modify AI-generated guidelines for this program only
-   - System generates unique application links for this program only
+   - **MANDATORY ONBOARDING STEP**: Complete calibration questions (determines accelerator's values for this program)
+     * Calibration answers are PERMANENT and persistent (unless user explicitly changes them)
+     * Questions cover importance weights: revenue stage, team experience, innovation, etc.
+     * These answers feed into AI Guidelines generation (AI #1)
+   - Build custom questionnaires for this specific program (sent to startup applicants)
+   - AI generates persistent scoring guidelines based on program-specific calibration (AI #1)
+   - Review and modify AI-generated guidelines for this program (remains same unless changed)
+   - Set up applicant management system for tracking startup applications
 
 ### 2. Startup Application (Program-Specific)
 1. Startup receives unique program-specific link (e.g., platform.com/apply/program-123/startup-abc456)
@@ -51,12 +54,28 @@ AI-powered application management platform designed for startup accelerators. Au
 4. Creates comprehensive PDF report using program's template
 5. Stores everything in database with program isolation
 
-### 4. Review and Decision Making (Program-Scoped)
-1. Staff navigates to specific program dashboard
-2. Views applications and reports only for that program
-3. Reviews scores, summaries, and concerns using program-specific criteria
-4. Can override AI scores within program context
-5. Ranks startups only against others in the same program
+### 4. Applicant Management & Tracking (Program-Scoped)
+1. Staff navigates to program dashboard → Applications page (spreadsheet-like interface)
+2. **Create Application Entries**: Manually add startup applications with:
+   - Startup name
+   - Contact email (where questionnaire will be sent)
+   - Select which questionnaire to send (from program's created questionnaires)
+3. **Track Application Activity** in real-time:
+   - Status tracking: "Not Sent", "Sent", "Completed", "Processing", "Report Ready"
+   - Submitted date and time
+   - Link to generated report (when ready)
+   - **Total ranking score** with color coding (0=red, 10=green, gradient in between)
+4. **Sorting & Management Capabilities**:
+   - Sort by startup name, application date, total score
+   - Filter by completion status
+   - Quick toggle between completed vs pending applications
+   - Export data functionality
+
+### 5. Review and Decision Making (Program-Scoped)
+1. Staff uses applicant management interface to review all applications for that program
+2. Views AI-generated reports with scores and summaries using program-specific criteria
+3. Can override AI scores within program context
+4. Ranks startups only against others in the same program using color-coded scoring
 
 ## Technical Architecture
 
@@ -154,17 +173,29 @@ scores                 -- Detailed scoring breakdown
 - JWT-based authentication for staff access
 - Organization-level security with complete data isolation
 
-### Multi-Program Architecture
-- **Unlimited Programs**: Each organization can create unlimited programs
+### Multi-Program Architecture & UX Logic
+- **Unlimited Programs**: Each organization can create unlimited programs (e.g., "Tech Industry Worldwide", "Education Startups UK")
 - **Complete Program Isolation**: Each program operates independently with:
   - Separate questionnaires (max 50 questions per program)
-  - Independent calibration settings and AI guidelines
+  - Independent calibration settings and AI guidelines (permanent unless changed)
   - Isolated application pools and reports
-  - Program-specific analytics and statistics
+  - Program-specific applicant management and tracking
+- **Enforced Program-Centric Workflow**: 
+  - Main dashboard only allows program selection or settings access
+  - No direct feature access without selecting a program first
+  - All features accessed through program-specific routes
+- **Mandatory Onboarding Flow**: Each program requires calibration completion before full functionality
 - **No Cross-Program Data Sharing**: Programs cannot access each other's data
 - **Program-Scoped Features**: All features (questionnaires, guidelines, applications) are program-specific
 - No application deadlines (for MVP)
 - Unlimited applications per program
+
+### Applicant Management Rules
+- Manual application entry by accelerator staff (startup name, email, questionnaire selection)
+- Real-time activity tracking and status updates
+- Color-coded scoring system (0-10 scale with visual indicators)
+- Sortable and filterable applicant lists per program
+- One-to-one relationship: each application tied to specific program and questionnaire
 
 ### File Management
 - PDF uploads only
@@ -179,21 +210,41 @@ scores                 -- Detailed scoring breakdown
 ### Branding
 - Platform branding only (no custom accelerator branding for MVP)
 
-## AI Prompt Structure
+## AI Processing Architecture (Two-Stage System)
 
-### 1. Guideline Generation Prompt
-- **Input**: Calibration answers from accelerator
-- **Process**: Start with base scoring template, adapt based on responses
-- **Output**: JSON schema with scoring weights and evaluation criteria
-- **User Review**: Present to user for modifications
+### AI #1: Guidelines Generation (Calibration → Guidelines)
+- **Purpose**: Convert accelerator preferences into scoring guidelines
+- **Input**: Program-specific calibration answers (permanent unless changed)
+- **Process**: Analyze importance weights (e.g., 5/10 revenue stage, 10/10 team experience, 1/10 innovation)
+- **Output**: Persistent scoring guidelines with weights for each evaluation category
+- **Frequency**: Generated once per calibration set, remains same unless user changes calibration
 
-### 2. Analysis Prompt
-- **Input**: Questions + Responses + Guidelines + PDF text
-- **Output**: Structured analysis with scores and summaries
+### AI #2: Application Processing (Questionnaire → Report)
+- **Purpose**: Analyze each startup application against program guidelines
+- **Input**: 
+  - All questionnaire questions and startup answers
+  - Uploaded PDF documents (text extracted)
+  - Program-specific AI guidelines (from AI #1)
+- **Process**: 
+  - Read and analyze all responses
+  - Apply importance weighting system from guidelines
+  - Generate scores for each report section
+- **Output**: 
+  - Comprehensive PDF report with 10 sections
+  - Overall score (0-10) sent back to applicant management dashboard
+  - Detailed section scores with justifications
 
-### 3. Report Generation Prompt
-- **Input**: Analysis results
-- **Output**: Formatted text for each report section
+### Report Structure (Fixed Template)
+- Overall score and executive summary
+- Problem-Solution Fit analysis
+- Ideal Customer Profile assessment
+- Product & Technology evaluation
+- Team Structure and experience
+- Market Opportunity analysis
+- Financial Overview assessment
+- Key Challenges identification
+- Validation & Achievements review
+- Areas for investigation and follow-up
 
 ## Performance Requirements
 
