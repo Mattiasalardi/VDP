@@ -115,9 +115,22 @@ Structured development plan for the AI-powered application management platform. 
 - [x] Validate complete user flow: Dashboard → Programs → Questionnaires → Builder
 - [x] Create comprehensive integration test script for workflow validation
 
+#### 4.6 Critical Questionnaire Persistence Fix (1h) ✅ COMPLETE
+- [x] **MISSION CRITICAL**: Fix questionnaire saving - "answers are not being saved, so they cannot be accessed again"
+- [x] Fix Question Create endpoint response serialization (proper QuestionResponse object creation)
+- [x] Fix Question Update endpoint .dict() calls on dictionary values causing 500 errors
+- [x] Fix Question Get endpoint returning raw SQLAlchemy object instead of QuestionResponse
+- [x] Simplify question schemas from strict Pydantic to flexible Dict[str,Any] validation
+- [x] Fix service layer field name error (question_text → text) causing 500 responses
+- [x] Replace frontend mock API calls with real database integration
+- [x] Fix questionnaire builder to use real questionnaire IDs instead of hardcoded mock (1)
+- [x] Ensure consistent field mapping between frontend (question_text) and backend (text)
+- [x] Create comprehensive test suite validating complete persistence workflow
+- [x] **RESULT**: Questions now save permanently, edit without errors, complete data persistence working
+
 ### Phase 5: Program-Scoped Public Application Forms & Applicant Management (4-5 hours)
 **Status**: 🎯 **READY TO START**  
-**Dependencies**: ✅ Phase 4 complete + Architecture Fix + Questionnaire Integration Fix complete  
+**Dependencies**: ✅ Phase 4 complete + Architecture Fix + Questionnaire Integration Fix + Questionnaire Persistence Fix complete  
 **Description**: Program-specific public-facing application forms for startups AND applicant management "spreadsheet" interface with complete program isolation
 
 #### 5.1 Program-Scoped Dynamic Form Generation (2h)
@@ -268,7 +281,7 @@ Structured development plan for the AI-powered application management platform. 
 
 ## Current Priority
 **🎯 READY FOR PHASE 5**: Program-Scoped Public Application Forms
-**Foundation Complete**: Multi-program architecture with enforced program-centric navigation
+**Foundation Complete**: Multi-program architecture with enforced program-centric navigation + persistent data storage
 
 ## Notes
 - Each task should be completable in a single focused session
@@ -277,6 +290,6 @@ Structured development plan for the AI-powered application management platform. 
 - All phases include testing of implemented functionality
 
 ---
-*Last Updated: 2025-07-21*
+*Last Updated: 2025-07-24*
 *Total Estimated Time: 30-40 hours*
-*Progress: **PHASES 1-4 COMPLETE** + Architecture Fix Complete - **READY FOR PHASE 5***
+*Progress: **PHASES 1-4.6 COMPLETE** + Architecture Fix + Questionnaire Persistence Fix Complete - **READY FOR PHASE 5***
