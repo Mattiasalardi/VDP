@@ -14,7 +14,8 @@ from app.schemas.question import (
     QuestionUpdate,
     QuestionResponse,
     QuestionListResponse,
-    QuestionReorderRequest
+    QuestionReorderRequest,
+    QuestionType
 )
 from app.schemas.questionnaire import (
     QuestionnaireCreate,
@@ -137,8 +138,8 @@ def create_question(
         question_type=question.question_type.value,
         is_required=question.is_required,
         order_index=question.order_index,
-        options=question.options.dict() if question.options else None,
-        validation_rules=question.validation_rules.dict() if question.validation_rules else None,
+        options=question.options if question.options else None,
+        validation_rules=question.validation_rules if question.validation_rules else None,
         questionnaire_id=questionnaire_id
     )
     
@@ -146,7 +147,19 @@ def create_question(
     db.commit()
     db.refresh(db_question)
     
-    return db_question
+    # Create proper response object
+    return QuestionResponse(
+        id=db_question.id,
+        text=db_question.text,
+        question_type=QuestionType(db_question.question_type),
+        is_required=db_question.is_required,
+        order_index=db_question.order_index,
+        options=db_question.options or {},
+        validation_rules=db_question.validation_rules or {},
+        questionnaire_id=db_question.questionnaire_id,
+        created_at=db_question.created_at.isoformat() if db_question.created_at else "",
+        updated_at=db_question.updated_at.isoformat() if db_question.updated_at else ""
+    )
 
 
 @router.get("/questions/{question_id}", response_model=QuestionResponse)
@@ -176,7 +189,19 @@ def get_question(
             detail="Question not found"
         )
     
-    return question
+    # Create proper response object
+    return QuestionResponse(
+        id=question.id,
+        text=question.text,
+        question_type=QuestionType(question.question_type),
+        is_required=question.is_required,
+        order_index=question.order_index,
+        options=question.options or {},
+        validation_rules=question.validation_rules or {},
+        questionnaire_id=question.questionnaire_id,
+        created_at=question.created_at.isoformat() if question.created_at else "",
+        updated_at=question.updated_at.isoformat() if question.updated_at else ""
+    )
 
 
 @router.put("/questions/{question_id}", response_model=QuestionResponse)
@@ -248,9 +273,9 @@ def update_question(
     
     for field, value in update_data.items():
         if field == "options" and value is not None:
-            setattr(db_question, field, value.dict())
+            setattr(db_question, field, value)
         elif field == "validation_rules" and value is not None:
-            setattr(db_question, field, value.dict())
+            setattr(db_question, field, value)
         elif field == "question_type" and value is not None:
             setattr(db_question, field, value.value)
         else:
@@ -259,7 +284,19 @@ def update_question(
     db.commit()
     db.refresh(db_question)
     
-    return db_question
+    # Create proper response object
+    return QuestionResponse(
+        id=db_question.id,
+        text=db_question.text,
+        question_type=QuestionType(db_question.question_type),
+        is_required=db_question.is_required,
+        order_index=db_question.order_index,
+        options=db_question.options or {},
+        validation_rules=db_question.validation_rules or {},
+        questionnaire_id=db_question.questionnaire_id,
+        created_at=db_question.created_at.isoformat() if db_question.created_at else "",
+        updated_at=db_question.updated_at.isoformat() if db_question.updated_at else ""
+    )
 
 
 @router.delete("/questions/{question_id}")

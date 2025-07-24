@@ -116,12 +116,13 @@ class ApiService {
     try {
       // Map frontend question format to backend format
       const backendQuestion = {
-        text: question.question_text,
+        text: question.text || question.question_text,
         question_type: question.question_type,
         is_required: question.is_required,
         order_index: question.order_index,
         options: question.options,
-        validation_rules: question.validation_rules || {}
+        validation_rules: question.validation_rules || {},
+        questionnaire_id: questionnaireId
       };
 
       const response = await fetch(`${API_BASE_URL}/questions/questionnaires/${questionnaireId}/questions`, {
@@ -138,12 +139,13 @@ class ApiService {
   async updateQuestion(questionId: number, question: any): Promise<ApiResponse<any>> {
     try {
       const backendQuestion = {
-        text: question.question_text,
+        text: question.text || question.question_text,
         question_type: question.question_type,
         is_required: question.is_required,
         order_index: question.order_index,
         options: question.options,
-        validation_rules: question.validation_rules || {}
+        validation_rules: question.validation_rules || {},
+        questionnaire_id: question.questionnaire_id
       };
 
       const response = await fetch(`${API_BASE_URL}/questions/questions/${questionId}`, {
@@ -182,56 +184,51 @@ class ApiService {
     }
   }
 
-  // Mock questionnaire methods (until backend endpoints are created)
+  // Real questionnaire methods using actual API endpoints
   async getQuestionnaires(): Promise<ApiResponse<any[]>> {
-    // TODO: Replace with actual API call when questionnaire endpoints are available
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve({
-          data: [
-            {
-              id: 1,
-              title: "TechEd Accelerator 2024 Application",
-              description: "Standard application form for our tech accelerator program",
-              created_at: "2024-01-15T10:00:00Z",
-              question_count: 0
-            }
-          ]
-        });
-      }, 500);
-    });
+    try {
+      const response = await fetch(`${API_BASE_URL}/questions/questionnaires`, {
+        method: 'GET',
+        headers: this.getHeaders()
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
   }
 
   async saveQuestionnaire(questionnaire: any): Promise<ApiResponse<any>> {
-    // TODO: Replace with actual API call when questionnaire endpoints are available
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve({
-          data: {
-            id: questionnaire.id || 1,
-            title: questionnaire.title,
+    try {
+      if (questionnaire.id) {
+        // Update existing questionnaire
+        const response = await fetch(`${API_BASE_URL}/questions/questionnaires/${questionnaire.id}`, {
+          method: 'PUT',
+          headers: this.getHeaders(),
+          body: JSON.stringify({
+            name: questionnaire.title,
             description: questionnaire.description,
-            created_at: new Date().toISOString()
-          }
+            is_active: true
+          })
         });
-      }, 1000);
-    });
+        return this.handleResponse(response);
+      } else {
+        return { error: 'Cannot save questionnaire without ID' };
+      }
+    } catch (error) {
+      return { error: 'Network error' };
+    }
   }
 
   async getQuestionnaire(id: number): Promise<ApiResponse<any>> {
-    // TODO: Replace with actual API call when questionnaire endpoints are available
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve({
-          data: {
-            id: id,
-            title: "TechEd Accelerator 2024 Application",
-            description: "Standard application form for our tech accelerator program",
-            questions: []
-          }
-        });
-      }, 500);
-    });
+    try {
+      const response = await fetch(`${API_BASE_URL}/questions/questionnaires/${id}`, {
+        method: 'GET',
+        headers: this.getHeaders()
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
   }
 
   // Calibration API methods

@@ -59,7 +59,17 @@ export default function QuestionnaireBuilderPage() {
         id: data.id,
         title: data.name,
         description: data.description || '',
-        questions: data.questions || []
+        questions: (data.questions || []).map((q: any) => ({
+          id: q.id,
+          question_type: q.question_type,
+          question_text: q.text, // Map backend 'text' to frontend 'question_text'
+          text: q.text, // Also keep 'text' for API compatibility
+          options: q.options || {},
+          order_index: q.order_index,
+          is_required: q.is_required,
+          validation_rules: q.validation_rules || {},
+          questionnaire_id: q.questionnaire_id
+        }))
       });
     } catch (error: any) {
       console.error('Error loading questionnaire:', error);
@@ -77,6 +87,7 @@ export default function QuestionnaireBuilderPage() {
     const newQuestion: Question = {
       question_type: type,
       question_text: '',
+      text: '', // Also include 'text' for API compatibility
       options: getDefaultOptions(type),
       order_index: questionnaire.questions.length,
       is_required: false
@@ -110,9 +121,19 @@ export default function QuestionnaireBuilderPage() {
   const updateQuestion = (index: number, field: string, value: any) => {
     setQuestionnaire(prev => ({
       ...prev,
-      questions: prev.questions.map((q, i) => 
-        i === index ? { ...q, [field]: value } : q
-      )
+      questions: prev.questions.map((q, i) => {
+        if (i === index) {
+          const updated = { ...q, [field]: value };
+          // Keep text fields in sync
+          if (field === 'question_text') {
+            updated.text = value;
+          } else if (field === 'text') {
+            updated.question_text = value;
+          }
+          return updated;
+        }
+        return q;
+      })
     }));
   };
 
@@ -185,29 +206,41 @@ export default function QuestionnaireBuilderPage() {
       const savedQuestionnaire = questionnaireResult.data;
       const questionnaireId = savedQuestionnaire.id;
 
-      // For MVP: We'll use a mock questionnaire ID of 1 since we don't have questionnaire APIs yet
-      // This would be replaced with actual API calls once questionnaire endpoints are implemented
-      const mockQuestionnaireId = 1;
-
-      // Save/update each question
+      // Save/update each question using the REAL questionnaire ID
       for (const question of questionnaire.questions) {
         if (question.id) {
           // Update existing question
-          const updateResult = await apiService.updateQuestion(question.id, question);
+          const updateResult = await apiService.updateQuestion(question.id, {
+            ...question,
+            questionnaire_id: questionnaireId
+          });
           if (updateResult.error) {
             console.error('Error updating question:', updateResult.error);
+            throw new Error(`Failed to update question: ${updateResult.error}`);
           }
         } else {
-          // Create new question
-          const createResult = await apiService.createQuestion(mockQuestionnaireId, question);
+          // Create new question with the correct questionnaire ID
+          const createResult = await apiService.createQuestion(questionnaireId, {
+            ...question,
+            text: question.text,
+            order_index: question.order_index ?? questionnaire.questions.indexOf(question)
+          });
           if (createResult.error) {
             console.error('Error creating question:', createResult.error);
+            throw new Error(`Failed to create question: ${createResult.error}`);
           }
         }
       }
 
       alert('Questionnaire saved successfully!');
-      router.push('/dashboard/questionnaires');
+      
+      // Redirect back to program-specific questionnaires if program context exists
+      if (programId) {
+        router.push(`/dashboard/programs/${programId}/questionnaires`);
+      } else {
+        // Fallback to program selection if no program context
+        router.push('/dashboard/programs');
+      }
     } catch (error) {
       console.error('Error saving questionnaire:', error);
       alert(`Error saving questionnaire: ${error instanceof Error ? error.message : 'Unknown error'}`);

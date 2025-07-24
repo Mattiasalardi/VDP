@@ -54,54 +54,14 @@ class QuestionBase(BaseModel):
     question_type: QuestionType
     is_required: bool = True
     order_index: int = Field(..., ge=0)
-    options: Optional[Union[
-        TextQuestionOptions,
-        MultipleChoiceQuestionOptions,
-        ScaleQuestionOptions,
-        FileUploadQuestionOptions
-    ]] = None
-    validation_rules: Optional[QuestionValidationRules] = None
+    options: Optional[Dict[str, Any]] = None
+    validation_rules: Optional[Dict[str, Any]] = None
 
-    @validator('options')
-    def validate_options_match_type(cls, v, values):
-        """Validate that options match the question type"""
-        if 'question_type' not in values:
-            return v
-        
-        question_type = values['question_type']
-        
-        # Options are required for certain question types
-        if question_type == QuestionType.MULTIPLE_CHOICE and not isinstance(v, MultipleChoiceQuestionOptions):
-            raise ValueError("Multiple choice questions require MultipleChoiceQuestionOptions")
-        
-        if question_type == QuestionType.SCALE and not isinstance(v, ScaleQuestionOptions):
-            raise ValueError("Scale questions require ScaleQuestionOptions")
-        
-        # Validate options match the question type
-        type_option_map = {
-            QuestionType.TEXT: TextQuestionOptions,
-            QuestionType.MULTIPLE_CHOICE: MultipleChoiceQuestionOptions,
-            QuestionType.SCALE: ScaleQuestionOptions,
-            QuestionType.FILE_UPLOAD: FileUploadQuestionOptions
-        }
-        
-        if v is not None and not isinstance(v, type_option_map[question_type]):
-            raise ValueError(f"Invalid options type for {question_type} question")
-        
-        return v
-
-    @validator('validation_rules', always=True)
-    def set_default_validation_rules(cls, v, values):
-        """Set default validation rules if not provided"""
-        if v is None:
-            is_required = values.get('is_required', True)
-            return QuestionValidationRules(required=is_required)
-        return v
 
 
 class QuestionCreate(QuestionBase):
     """Schema for creating a question"""
-    questionnaire_id: int = Field(..., gt=0)
+    questionnaire_id: Optional[int] = Field(None, gt=0)  # Optional since it comes from URL path
 
 
 class QuestionUpdate(BaseModel):

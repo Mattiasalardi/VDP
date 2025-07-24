@@ -113,7 +113,6 @@ class QuestionnaireService:
                 questions_data.append({
                     "id": q.id,
                     "question_type": q.question_type,
-                    "question_text": q.question_text,
                     "text": q.text,
                     "options": q.options,
                     "is_required": q.is_required,
