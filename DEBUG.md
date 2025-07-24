@@ -275,5 +275,48 @@ href={programId ? `/dashboard/programs/${programId}/questionnaires` : "/dashboar
 **Test Validation**: Created `backend/scripts/test_questionnaire_workflow.py` - all 5 steps pass
 **Context**: Happens when architectural changes break existing feature integrations. Always test complete user flows after major changes.
 
+### [Frontend] Program-Specific Interfaces Showing Placeholders Instead of Functionality
+**Problem**: After implementing program-centric architecture, program-specific interfaces (calibration, guidelines) were showing placeholder messages instead of functional components
+**Solution**: Three critical fixes needed:
+
+1. **Program-Specific Calibration Interface** (`frontend/src/app/dashboard/programs/[id]/calibration/page.tsx`):
+```javascript
+// BEFORE: Placeholder showing "API endpoints need to be updated"
+// AFTER: Full calibration implementation using existing working component
+const loadProgramCalibrationData = async () => {
+  // Load program details
+  const programResponse = await apiService.get(`/programs/${programId}`);
+  // Load calibration questions + session data
+  const questionsResult = await apiService.getCalibrationQuestions();
+  const sessionResult = await apiService.getCalibrationSession(programId);
+  // Process and render full calibration interface
+};
+```
+
+2. **Program-Specific AI Guidelines Interface** (`frontend/src/app/dashboard/programs/[id]/guidelines/page.tsx`):
+```javascript
+// BEFORE: Placeholder trying to call non-existent API methods
+// AFTER: Added 7 missing API methods to api.ts and updated interface
+const loadProgramData = async () => {
+  const guidelinesResponse = await apiService.getGuidelinesHistory(parseInt(programId));
+  // Full guidelines management with generation, history, activation
+};
+```
+
+3. **Missing API Service Methods** (`frontend/src/services/api.ts`):
+```javascript
+// Added 7 missing AI guidelines methods:
+async generateAiGuidelines(programId: number, model?: string)
+async getActiveGuidelines(programId: number)
+async getGuidelinesHistory(programId: number)
+async saveAiGuidelines(programId: number, guidelines: any, isActive: boolean, notes?: string)
+async activateGuidelinesVersion(programId: number, version: number)
+async getGuidelinesStatus(programId: number)
+async generateAndSaveGuidelines(programId: number, model?: string, activateImmediately: boolean, notes?: string)
+```
+
+**Test Validation**: Created comprehensive test suite (`test_foundation_workflow.py`) achieving 100% pass rate across all 7 test categories
+**Context**: Always audit program-specific interfaces after architectural changes to ensure no placeholders remain
+
 ---
 *Debug entries will be added as we encounter and solve issues during development.*

@@ -329,6 +329,99 @@ class ApiService {
       return { error: 'Network error' };
     }
   }
+
+  // AI Guidelines methods
+  async generateAiGuidelines(programId: number, model?: string): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/ai-guidelines/generate?program_id=${programId}`, {
+        method: 'POST',
+        headers: this.getHeaders(),
+        body: JSON.stringify({ model: model || "anthropic/claude-3.5-sonnet" })
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
+  }
+
+  async getActiveGuidelines(programId: number): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/ai-guidelines/active?program_id=${programId}`, {
+        method: 'GET',
+        headers: this.getHeaders()
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
+  }
+
+  async getGuidelinesHistory(programId: number): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/ai-guidelines/history?program_id=${programId}`, {
+        method: 'GET',
+        headers: this.getHeaders()
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
+  }
+
+  async saveAiGuidelines(programId: number, guidelines: any, isActive: boolean = false, notes?: string): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/ai-guidelines/save?program_id=${programId}`, {
+        method: 'POST',
+        headers: this.getHeaders(),
+        body: JSON.stringify({ guidelines, is_active: isActive, notes })
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
+  }
+
+  async activateGuidelinesVersion(programId: number, version: number): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/ai-guidelines/activate?program_id=${programId}`, {
+        method: 'POST',
+        headers: this.getHeaders(),
+        body: JSON.stringify({ version })
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
+  }
+
+  async getGuidelinesStatus(programId: number): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/ai-guidelines/status?program_id=${programId}`, {
+        method: 'GET',
+        headers: this.getHeaders()
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
+  }
+
+  async generateAndSaveGuidelines(programId: number, model?: string, activateImmediately: boolean = false, notes?: string): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/ai-guidelines/generate-and-save?program_id=${programId}`, {
+        method: 'POST',
+        headers: this.getHeaders(),
+        body: JSON.stringify({ 
+          model: model || "anthropic/claude-3.5-sonnet", 
+          activate_immediately: activateImmediately,
+          notes 
+        })
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return { error: 'Network error' };
+    }
+  }
 }
 
 export const apiService = new ApiService();

@@ -51,10 +51,17 @@ export default function ProgramGuidelinesPage() {
       }
 
       // Load existing guidelines for this program
-      // API needs to be updated to support program filtering
-      const guidelinesResponse = await apiService.get(`/ai-guidelines/programs/${programId}`);
-      if (guidelinesResponse.success) {
-        setGuidelines(guidelinesResponse.guidelines || []);
+      const guidelinesResponse = await apiService.getGuidelinesHistory(parseInt(programId));
+      if (guidelinesResponse.data && guidelinesResponse.data.guidelines) {
+        setGuidelines(guidelinesResponse.data.guidelines);
+      } else if (guidelinesResponse.error) {
+        // If no guidelines exist yet, that's not an error
+        if (!guidelinesResponse.error.includes('not found')) {
+          setError(`Failed to load guidelines: ${guidelinesResponse.error}`);
+        }
+        setGuidelines([]);
+      } else {
+        setGuidelines([]);
       }
 
     } catch (error: any) {
@@ -70,11 +77,16 @@ export default function ProgramGuidelinesPage() {
     setSuccess(null);
 
     try {
-      // Generate guidelines based on program-specific calibration
-      const response = await apiService.post(`/ai-guidelines/programs/${programId}/generate`, {});
+      // Generate and save guidelines based on program-specific calibration
+      const response = await apiService.generateAndSaveGuidelines(
+        parseInt(programId), 
+        "anthropic/claude-3.5-sonnet", 
+        true, // activate immediately
+        `Generated for program: ${program?.name}`
+      );
       
-      if (response.success) {
-        setSuccess('AI Guidelines generated successfully!');
+      if (response.data && response.data.success) {
+        setSuccess('AI Guidelines generated and activated successfully!');
         loadProgramData(); // Reload to show new guidelines
       } else {
         setError(response.error || 'Failed to generate guidelines');
@@ -156,42 +168,86 @@ export default function ProgramGuidelinesPage() {
         )}
 
         {/* Program-Scoped Guidelines */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <div className="text-center py-12">
-            <div className="text-6xl mb-4">🤖</div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Program-Specific AI Guidelines
-            </h3>
-            <p className="text-gray-600 mb-6">
-              This is the program-specific AI guidelines management for {program.name}.
-              Guidelines generated here will only apply to applications for this program.
-            </p>
-            <div className="bg-indigo-50 border border-indigo-200 rounded-md p-4 max-w-md mx-auto">
-              <p className="text-sm text-indigo-800">
-                <strong>Program Context:</strong> Guidelines will be generated based on the 
-                calibration answers specific to this program, ensuring each program has 
-                its own unique scoring criteria.
+        {guidelines.length === 0 ? (
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">🤖</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                No AI Guidelines Yet
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Generate AI scoring guidelines for <strong>{program.name}</strong> based on your calibration preferences.
+                These guidelines will be used to automatically score startup applications.
+              </p>
+              <div className="bg-blue-50 border border-blue-200 rounded-md p-4 max-w-lg mx-auto mb-6">
+                <p className="text-sm text-blue-800">
+                  <strong>How it works:</strong> AI analyzes your calibration answers to create custom 
+                  scoring guidelines that match your program's priorities and preferences.
+                </p>
+              </div>
+              <button
+                onClick={handleGenerateGuidelines}
+                disabled={generating}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium disabled:opacity-50"
+              >
+                {generating ? 'Generating Guidelines...' : 'Generate AI Guidelines'}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Active AI Guidelines for {program.name}
+              </h3>
+              <p className="text-gray-600">
+                {guidelines.length} scoring sections configured based on your calibration preferences.
               </p>
             </div>
 
-            {guidelines.length > 0 && (
-              <div className="mt-6">
-                <h4 className="text-lg font-semibold text-gray-900 mb-4">
-                  Current Guidelines ({guidelines.length} sections)
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
-                  {guidelines.map((guideline) => (
-                    <div key={guideline.id} className="p-4 bg-gray-50 rounded-lg text-left">
-                      <h5 className="font-medium text-gray-900">{guideline.section}</h5>
-                      <p className="text-sm text-gray-600">Weight: {guideline.weight}</p>
-                      <p className="text-xs text-gray-500">v{guideline.version}</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {guidelines.map((guideline) => (
+                <div key={guideline.id} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                  <div className="flex justify-between items-start mb-2">
+                    <h5 className="font-medium text-gray-900">{guideline.section}</h5>
+                    {guideline.is_active && (
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        Active
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-600 mb-2">Weight: {guideline.weight}/10</p>
+                  <p className="text-xs text-gray-500">
+                    Version {guideline.version} • {new Date(guideline.created_at).toLocaleDateString()}
+                  </p>
+                  {guideline.criteria && (
+                    <div className="mt-2">
+                      <p className="text-xs text-gray-600 truncate">
+                        {typeof guideline.criteria === 'string' 
+                          ? guideline.criteria.substring(0, 100) + '...'
+                          : JSON.stringify(guideline.criteria).substring(0, 100) + '...'
+                        }
+                      </p>
                     </div>
-                  ))}
+                  )}
                 </div>
+              ))}
+            </div>
+
+            <div className="mt-6 flex justify-between items-center">
+              <div className="text-sm text-gray-600">
+                Last updated: {guidelines.length > 0 ? new Date(guidelines[0].created_at).toLocaleDateString() : 'Never'}
               </div>
-            )}
+              <button
+                onClick={handleGenerateGuidelines}
+                disabled={generating}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50"
+              >
+                {generating ? 'Regenerating...' : 'Regenerate Guidelines'}
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
